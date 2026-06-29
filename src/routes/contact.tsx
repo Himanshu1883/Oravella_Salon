@@ -27,7 +27,7 @@ function ContactPage() {
           </>
         }
         backgroundImage={MEDIA.salonNails}
-        height="80svh"
+        height="80vh"
       />
 
       <section className="bg-bg-primary py-24 md:py-32 px-6 md:px-12">
