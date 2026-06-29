@@ -1,29 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HeroSection } from "@/components/home/HeroSection";
+import { AboutTeaser } from "@/components/home/AboutTeaser";
+import { ServicesPreview } from "@/components/home/ServicesPreview";
+import { QuoteBreak } from "@/components/home/QuoteBreak";
+import { InstagramSection } from "@/components/home/InstagramSection";
+import { Testimonials } from "@/components/home/Testimonials";
+import { FinalCTA } from "@/components/home/FinalCTA";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "Orvella Salon — Luxury Hair, Skin & Beauty in Lajpat Nagar" },
+      { name: "description", content: "Orvella Salon is New Delhi's premier luxury salon for hair, skincare, makeup, and bridal services in Lajpat Nagar II." },
+      { property: "og:title", content: "Orvella Salon — Luxury Hair, Skin & Beauty" },
+      { property: "og:description", content: "Precision. Creativity. Luxury. Every visit, an experience." },
     ],
   }),
-  component: Index,
+  component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Home() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <HeroSection />
+      <AboutTeaser />
+      <ServicesPreview />
+      <QuoteBreak />
+      <InstagramSection />
+      <Testimonials />
+      <FinalCTA />
+    </>
   );
 }
