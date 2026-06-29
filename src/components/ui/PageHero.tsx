@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap } from "@/lib/gsap";
 
 interface PageHeroProps {
   eyebrow: string;
@@ -14,24 +14,13 @@ export function PageHero({
   title,
   subtitle,
   backgroundImage,
-  height = "100vh",
+  height = "100svh",
 }: PageHeroProps) {
   const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const ctx = gsap.context(() => {
-      gsap.to(".ph-bg", {
-        yPercent: 30,
-        ease: "none",
-        scrollTrigger: {
-          trigger: root.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-
       const tl = gsap.timeline({ defaults: { ease: "power4.out" }, delay: 0.2 });
       tl.from(".ph-eyebrow", { y: 20, opacity: 0, duration: 0.8 })
         .from(".ph-title", { y: 60, opacity: 0, duration: 1.1 }, 0.2)
@@ -43,19 +32,21 @@ export function PageHero({
   return (
     <section
       ref={root}
-      className="relative w-full overflow-hidden"
-      style={{ height }}
+      className="relative w-full overflow-hidden bg-bg-primary"
+      style={{ height, minHeight: height }}
     >
       <img
         src={backgroundImage}
         alt=""
-        className="ph-bg absolute inset-0 h-[120%] w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover object-top"
+        loading="eager"
+        decoding="async"
       />
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(8,8,8,0.55) 0%, rgba(8,8,8,0.35) 45%, rgba(8,8,8,0.85) 100%)",
+            "linear-gradient(180deg, rgba(8,8,8,0.45) 0%, rgba(8,8,8,0.3) 45%, rgba(8,8,8,0.85) 100%)",
         }}
       />
       <div className="relative z-10 h-full flex flex-col justify-end px-6 md:px-16 pb-20 md:pb-28 max-w-[1500px] mx-auto">
