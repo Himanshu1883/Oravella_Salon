@@ -1,0 +1,23 @@
+import logo from "@/assets/logo_orvellasalon.PNG";
+import heroVideo from "@/assets/IMG_0434.MP4";
+import ambientReel from "@/assets/WhatsApp Video 2026-06-29 at 11.33.31 AM (1).mp4";
+import bridalReel from "@/assets/WhatsApp Video 2026-06-29 at 11.33.31 AM.mp4";
+import salonLounge from "@/assets/7.png";
+import salonChandelier from "@/assets/8.png";
+import salonNails from "@/assets/9.png";
+import salonLounge2 from "@/assets/10.png";
+import salonExtra1 from "@/assets/11.png";
+import salonExtra2 from "@/assets/12.png";
+
+export const MEDIA = {
+  logo,
+  heroVideo,
+  ambientReel,
+  bridalReel,
+  salonLounge,
+  salonChandelier,
+  salonNails,
+  salonLounge2,
+  salonExtra1,
+  salonExtra2,
+} as const;

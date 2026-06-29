@@ -2,12 +2,12 @@ import { Link } from "@tanstack/react-router";
 import { FaWhatsapp } from "react-icons/fa";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { WHATSAPP_URL } from "@/lib/constants";
-import bg from "@/assets/salon-lounge2.jpg.asset.json";
+import { MEDIA } from "@/lib/media";
 
 export function FinalCTA() {
   return (
     <section className="relative py-32 md:py-48 overflow-hidden">
-      <img src={bg.url} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+      <img src={MEDIA.salonExtra2} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
       <div className="absolute inset-0 bg-black/80" />
       <div className="relative z-10 mx-auto max-w-3xl text-center px-6">
         <SectionEyebrow>Begin Your Journey</SectionEyebrow>

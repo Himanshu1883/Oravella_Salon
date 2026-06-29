@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
-import salonImg from "@/assets/salon-lounge.jpg.asset.json";
+import { MEDIA } from "@/lib/media";
 
 export function AboutTeaser() {
   const root = useRef<HTMLDivElement>(null);
@@ -50,7 +50,7 @@ export function AboutTeaser() {
       <div className="mx-auto max-w-[1500px] grid md:grid-cols-2 gap-16 md:gap-24 items-center">
         <div className="relative overflow-hidden" style={{ aspectRatio: "3 / 4" }}>
           <img
-            src={salonImg.url}
+            src={MEDIA.salonLounge}
             alt="Inside Orvella Salon"
             className="about-img absolute inset-0 w-full h-[115%] object-cover"
             loading="lazy"

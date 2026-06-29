@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import bg from "@/assets/salon-chandelier.jpg.asset.json";
+import { MEDIA } from "@/lib/media";
 
 export function QuoteBreak() {
   const root = useRef<HTMLDivElement>(null);
@@ -25,7 +25,16 @@ export function QuoteBreak() {
   const q = "Beauty is the illumination of your soul.";
   return (
     <section ref={root} className="relative overflow-hidden" style={{ height: "85vh" }}>
-      <img src={bg.url} alt="" className="quote-bg absolute inset-0 w-full h-[120%] object-cover" loading="lazy" />
+      <video
+        src={MEDIA.ambientReel}
+        className="quote-bg absolute inset-0 w-full h-[120%] object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        poster={MEDIA.salonChandelier}
+      />
       <div className="absolute inset-0 bg-black/75" />
       <div className="relative z-10 h-full grid place-items-center px-6">
         <div className="max-w-5xl text-center">

@@ -1,8 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { gsap } from "@/lib/gsap";
-import heroVideo from "@/assets/hero-reel.mp4.asset.json";
-import poster from "@/assets/salon-chandelier.jpg.asset.json";
+import { MEDIA } from "@/lib/media";
 
 export function HeroSection() {
   const root = useRef<HTMLDivElement>(null);
@@ -25,8 +24,8 @@ export function HeroSection() {
       <video
         className="hero-video absolute inset-0 h-full w-full object-cover scale-105"
         autoPlay muted loop playsInline preload="metadata"
-        poster={poster.url}
-        src={heroVideo.url}
+        poster={MEDIA.salonChandelier}
+        src={MEDIA.heroVideo}
       />
       <div className="absolute inset-0" style={{
         background: "linear-gradient(180deg, rgba(8,8,8,0.55) 0%, rgba(8,8,8,0.25) 35%, rgba(8,8,8,0.75) 75%, rgba(8,8,8,0.95) 100%)"

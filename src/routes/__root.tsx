@@ -17,6 +17,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
+import { PageTransition } from "@/components/layout/PageTransition";
 
 function NotFoundComponent() {
   return (
@@ -120,7 +121,9 @@ function RootComponent() {
         <ScrollProgress />
         <Navbar />
         <main>
-          <Outlet />
+          <PageTransition>
+            <Outlet />
+          </PageTransition>
         </main>
         <Footer />
         <WhatsAppFloat />
