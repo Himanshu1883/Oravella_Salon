@@ -3,6 +3,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { NAV_LINKS } from "@/lib/constants";
 import { useTheme } from "@/components/ThemeProvider";
+import { CtaButton } from "@/components/ui/CtaButton";
 import { MEDIA } from "@/lib/media";
 import { cn } from "@/lib/utils";
 
@@ -65,12 +66,9 @@ export function Navbar() {
             >
               {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
             </button>
-            <Link
-              to="/contact"
-              className="hidden md:inline-flex items-center px-5 py-2.5 border border-gold text-gold text-[0.7rem] tracking-[0.25em] uppercase hover:bg-gold hover:text-bg-primary transition-colors"
-            >
+            <CtaButton to="/contact" variant="ghost" compact className="hidden md:inline-flex">
               Book Now
-            </Link>
+            </CtaButton>
             <button
               onClick={() => setOpen(true)}
               className="md:hidden text-text-primary"

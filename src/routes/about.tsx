@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useLayoutEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { MarqueeStrip } from "@/components/ui/MarqueeStrip";
 import { FinalCTA } from "@/components/home/FinalCTA";
+import { CtaButton } from "@/components/ui/CtaButton";
 import { MEDIA } from "@/lib/media";
 
 const salonLounge = { url: MEDIA.salonLounge };
@@ -231,9 +232,9 @@ function AboutPage() {
           </div>
 
           <div className="mt-16 text-center">
-            <Link to="/contact" className="inline-flex items-center px-8 py-4 border border-gold text-gold text-[0.72rem] tracking-[0.3em] uppercase hover:bg-gold hover:text-bg-primary transition">
+            <CtaButton to="/contact" variant="ghost">
               Meet us in person
-            </Link>
+            </CtaButton>
           </div>
         </div>
       </section>

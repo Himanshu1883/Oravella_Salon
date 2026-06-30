@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useLayoutEffect, useRef, useState } from "react";
-import { Link } from "@tanstack/react-router";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { MarqueeStrip } from "@/components/ui/MarqueeStrip";
 import { FinalCTA } from "@/components/home/FinalCTA";
+import { CtaButton } from "@/components/ui/CtaButton";
 import { MEDIA } from "@/lib/media";
 
 const salonChandelier = { url: MEDIA.salonChandelier };
@@ -240,12 +240,9 @@ function ServicesPage() {
                   ))}
                 </ul>
 
-                <Link
-                  to="/contact"
-                  className="sv-row-anim mt-10 inline-flex items-center px-7 py-3.5 border border-gold text-gold text-[0.7rem] tracking-[0.3em] uppercase hover:bg-gold hover:text-bg-primary transition"
-                >
+                <CtaButton to="/contact" variant="ghost" className="sv-row-anim mt-10">
                   Book this service
-                </Link>
+                </CtaButton>
               </div>
             </article>
           ))}

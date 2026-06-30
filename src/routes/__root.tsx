@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { CtaButton } from "@/components/ui/CtaButton";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -50,15 +51,12 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <h1 className="heading-display text-text-primary text-3xl">This page didn't load</h1>
         <p className="mt-4 text-sm text-text-secondary">Something went wrong on our end.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <button
-            onClick={() => { router.invalidate(); reset(); }}
-            className="px-5 py-2.5 bg-gold text-bg-primary text-xs tracking-[0.25em] uppercase hover:bg-gold-muted transition"
-          >
+          <CtaButton onClick={() => { router.invalidate(); reset(); }} compact>
             Try again
-          </button>
-          <a href="/" className="px-5 py-2.5 border border-border-subtle text-text-primary text-xs tracking-[0.25em] uppercase hover:border-gold transition">
+          </CtaButton>
+          <CtaButton href="/" variant="ghost" compact>
             Go home
-          </a>
+          </CtaButton>
         </div>
       </div>
     </div>

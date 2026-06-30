@@ -5,6 +5,7 @@ import type {
   BridalPackage,
   TeamMember,
   InstagramPost,
+  IgProfile,
   Stat,
   ValueItem,
   Transformation,
@@ -170,6 +171,45 @@ export const HERO_IMAGES = {
   chandelier: MEDIA.salonChandelier,
   nails: MEDIA.salonNails,
   lounge2: MEDIA.salonLounge2,
+};
+
+const IG_REELS = [
+  { type: "video" as const, src: MEDIA.bridalReel, poster: MEDIA.salonExtra1, caption: "Bridal transformation in motion ✨ #orvellabride" },
+  { type: "video" as const, src: MEDIA.ambientReel, poster: MEDIA.salonChandelier, caption: "Step inside the Orvella experience 💛" },
+  { type: "video" as const, src: MEDIA.heroVideo, poster: MEDIA.salonLounge, caption: "Where every detail is intentional." },
+];
+
+export const IG_PROFILE: IgProfile = {
+  handle: "orvellasalon",
+  verified: true,
+  name: "Orvella Salon | Luxury Hair & Beauty Salon",
+  bio: [
+    "Find Your Radiance @orvellasalon ✨",
+    "Hair | Skin | Nails | Bridal & Makeup Experts",
+    "📞 9582180189, 9217270189",
+    "📍 Lajpat Nagar II, New Delhi",
+  ],
+  link: "linktr.ee/orvellasalon",
+  linkUrl: SITE.instagram,
+  stats: { posts: "9", followers: "211", following: "0" },
+  highlights: [
+    { label: "Colour", cover: MEDIA.salonChandelier },
+    { label: "Men's", cover: MEDIA.salonNails },
+    { label: "Offers", cover: MEDIA.salonExtra1 },
+    { label: "What We Have", cover: MEDIA.logo },
+  ],
+  posts: [
+    { type: "image", src: MEDIA.salonLounge, caption: "Quiet luxury, every visit." },
+    { type: "video", src: MEDIA.bridalReel, poster: MEDIA.salonExtra1, caption: "Bridal transformation in motion ✨" },
+    { type: "image", src: MEDIA.salonChandelier, caption: "Gilded glow." },
+    { type: "image", src: MEDIA.salonNails, caption: "Polished to perfection." },
+    { type: "video", src: MEDIA.ambientReel, poster: MEDIA.salonChandelier, caption: "Step inside the Orvella experience 💛" },
+    { type: "image", src: MEDIA.salonLounge2, caption: "Quiet corners." },
+    { type: "image", src: MEDIA.salonExtra1, caption: "The bridal suite." },
+    { type: "video", src: MEDIA.heroVideo, poster: MEDIA.salonLounge, caption: "Where every detail is intentional." },
+    { type: "image", src: MEDIA.salonExtra2, caption: "The finish." },
+  ],
+  reels: IG_REELS,
 };
 
 export const BRIDAL_PACKAGES: BridalPackage[] = [

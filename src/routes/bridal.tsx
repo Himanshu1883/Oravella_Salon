@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useLayoutEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { MarqueeStrip } from "@/components/ui/MarqueeStrip";
 import { FinalCTA } from "@/components/home/FinalCTA";
+import { CtaButton } from "@/components/ui/CtaButton";
 import { MEDIA } from "@/lib/media";
 
 const bridalVideo = { url: MEDIA.bridalReel };
@@ -151,12 +152,10 @@ function BridalPage() {
             recognisably herself on the most photographed day of her life.
           </p>
           <div className="br-hero-cta mt-10 flex flex-wrap gap-4">
-            <Link to="/contact" className="px-8 py-4 bg-gold text-bg-primary text-[0.72rem] tracking-[0.3em] uppercase hover:bg-gold-muted transition">
-              Book Consultation
-            </Link>
-            <a href="#packages" className="px-8 py-4 border border-white/40 text-white text-[0.72rem] tracking-[0.3em] uppercase hover:bg-white hover:text-bg-primary transition">
+            <CtaButton to="/contact">Book Consultation</CtaButton>
+            <CtaButton href="#packages" variant="outline">
               View Packages
-            </a>
+            </CtaButton>
           </div>
         </div>
       </section>
@@ -205,16 +204,13 @@ function BridalPage() {
                     </li>
                   ))}
                 </ul>
-                <Link
+                <CtaButton
                   to="/contact"
-                  className={`mt-10 inline-flex justify-center items-center px-6 py-3.5 text-[0.7rem] tracking-[0.3em] uppercase transition ${
-                    p.accent
-                      ? "bg-gold text-bg-primary hover:bg-gold-muted"
-                      : "border border-gold text-gold hover:bg-gold hover:text-bg-primary"
-                  }`}
+                  variant={p.accent ? "gold" : "ghost"}
+                  className="mt-10 w-full"
                 >
                   Enquire
-                </Link>
+                </CtaButton>
               </article>
             ))}
           </div>

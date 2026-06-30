@@ -5,19 +5,20 @@ import { cn } from "@/lib/utils";
 type Variant = "gold" | "outline" | "ghost" | "underline" | "whatsapp";
 
 const VARIANTS: Record<Variant, string> = {
-  gold: "px-8 py-4 bg-gold text-bg-primary hover:bg-gold-muted",
-  outline:
-    "px-8 py-4 border border-white/40 text-white hover:bg-white hover:text-bg-primary",
-  ghost:
-    "px-8 py-4 border border-gold text-gold hover:bg-gold hover:text-bg-primary",
+  gold: "animated-button",
+  outline: "animated-button animated-button--outline",
+  ghost: "animated-button animated-button--ghost",
   underline: "eyebrow gold-underline text-gold !tracking-[0.25em] px-0 py-0",
-  whatsapp: "px-8 py-4 text-white hover:opacity-90",
+  whatsapp: "animated-button animated-button--whatsapp",
 };
 
 interface BaseProps {
   children: ReactNode;
   variant?: Variant;
   className?: string;
+  compact?: boolean;
+  /** Use on dark image/video overlays so text and ring stay light */
+  onDark?: boolean;
 }
 
 type ButtonProps = BaseProps & {
@@ -29,10 +30,21 @@ type ButtonProps = BaseProps & {
   target?: string;
 };
 
+function AnimatedContent({ children }: { children: ReactNode }) {
+  return (
+    <>
+      <span className="animated-button__label">{children}</span>
+      <span className="animated-button__blob" aria-hidden="true" />
+    </>
+  );
+}
+
 export function CtaButton({
   children,
   variant = "gold",
   className,
+  compact,
+  onDark,
   to,
   href,
   onClick,
@@ -40,20 +52,42 @@ export function CtaButton({
   disabled,
   target,
 }: ButtonProps) {
+  const isUnderline = variant === "underline";
+
   const base = cn(
-    "inline-flex items-center justify-center gap-3 text-[0.72rem] tracking-[0.3em] uppercase transition-colors duration-300",
     VARIANTS[variant],
+    onDark && !isUnderline && "animated-button--on-dark",
+    compact && !isUnderline && "animated-button--compact",
     disabled && "opacity-60 pointer-events-none",
     className
   );
 
-  const style =
-    variant === "whatsapp" ? { background: "#25D366" } : undefined;
+  if (isUnderline) {
+    if (to) {
+      return (
+        <Link to={to} className={base}>
+          {children}
+        </Link>
+      );
+    }
+    if (href) {
+      return (
+        <a href={href} target={target ?? "_blank"} rel="noreferrer" className={base}>
+          {children}
+        </a>
+      );
+    }
+    return (
+      <button type={type} onClick={onClick} disabled={disabled} className={base}>
+        {children}
+      </button>
+    );
+  }
 
   if (to) {
     return (
-      <Link to={to} className={base} style={style}>
-        {children}
+      <Link to={to} className={base} aria-disabled={disabled || undefined}>
+        <AnimatedContent>{children}</AnimatedContent>
       </Link>
     );
   }
@@ -65,16 +99,16 @@ export function CtaButton({
         target={target ?? "_blank"}
         rel="noreferrer"
         className={base}
-        style={style}
+        aria-disabled={disabled || undefined}
       >
-        {children}
+        <AnimatedContent>{children}</AnimatedContent>
       </a>
     );
   }
 
   return (
-    <button type={type} onClick={onClick} disabled={disabled} className={base} style={style}>
-      {children}
+    <button type={type} onClick={onClick} disabled={disabled} className={base}>
+      <AnimatedContent>{children}</AnimatedContent>
     </button>
   );
 }

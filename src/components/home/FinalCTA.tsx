@@ -1,6 +1,6 @@
-import { Link } from "@tanstack/react-router";
 import { FaWhatsapp } from "react-icons/fa";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
+import { CtaButton } from "@/components/ui/CtaButton";
 import { WHATSAPP_URL } from "@/lib/constants";
 import { MEDIA } from "@/lib/media";
 
@@ -18,21 +18,12 @@ export function FinalCTA() {
           Reserve your seat in our atelier. Our team will confirm your booking personally.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-4">
-          <Link
-            to="/contact"
-            className="px-8 py-4 bg-gold text-bg-primary text-[0.72rem] tracking-[0.3em] uppercase hover:bg-gold-muted transition"
-          >
+          <CtaButton to="/contact" onDark>
             Book Now
-          </Link>
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-3 px-8 py-4 text-white text-[0.72rem] tracking-[0.3em] uppercase transition hover:opacity-90"
-            style={{ background: "#25D366" }}
-          >
+          </CtaButton>
+          <CtaButton href={WHATSAPP_URL} variant="whatsapp" onDark>
             <FaWhatsapp size={16} /> WhatsApp Us
-          </a>
+          </CtaButton>
         </div>
       </div>
     </section>

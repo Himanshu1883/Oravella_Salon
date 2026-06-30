@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { MEDIA } from "@/lib/media";
 import { Footer } from "@/components/layout/Footer";
+import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import "./column-scroll.css";
 
 /* -------------------------------------------------------------------------
@@ -463,6 +464,28 @@ class Grid {
 
 export function ColumnScrollGallery() {
   const rootRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(".cs-hero-line", {
+        yPercent: 110,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 1.1,
+        ease: "power4.out",
+        delay: 0.2,
+      });
+      gsap.from(".cs-hero-sub", {
+        opacity: 0,
+        y: 18,
+        duration: 0.85,
+        delay: 0.75,
+        ease: "power3.out",
+      });
+    }, heroRef);
+    return () => ctx.revert();
+  }, []);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -516,6 +539,27 @@ export function ColumnScrollGallery() {
       <h2 className="heading heading--down">Orvella</h2>
 
       <div className="cs-scroll" data-scroll-container="">
+        <header className="cs-hero" ref={heroRef} data-scroll-section="">
+          <div className="cs-hero__inner">
+            <SectionEyebrow>The Atelier in Motion</SectionEyebrow>
+            <h1
+              className="cs-hero__title heading-display text-text-primary"
+              style={{ fontSize: "clamp(2.75rem, 9vw, 7.5rem)", lineHeight: 0.95 }}
+            >
+              <span className="block overflow-hidden">
+                <span className="cs-hero-line inline-block">The</span>{" "}
+                <span className="cs-hero-line inline-block italic font-accent text-gold">
+                  Gallery
+                </span>
+              </span>
+            </h1>
+            <p className="cs-hero-sub cs-hero__sub text-text-secondary">
+              Scroll through the spaces, details, and craft of Orvella. Tap any frame
+              to step inside.
+            </p>
+          </div>
+        </header>
+
         <div className="columns">
           {DATA.columns.map((col, ci) => (
             <div

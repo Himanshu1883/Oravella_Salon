@@ -36,6 +36,31 @@ export interface InstagramPost {
   span: string;
 }
 
+export interface IgPost {
+  type: "image" | "video";
+  src: string;
+  poster?: string;
+  caption: string;
+}
+
+export interface IgHighlight {
+  label: string;
+  cover: string;
+}
+
+export interface IgProfile {
+  handle: string;
+  verified: boolean;
+  name: string;
+  bio: string[];
+  link: string;
+  linkUrl: string;
+  stats: { posts: string; followers: string; following: string };
+  highlights: IgHighlight[];
+  posts: IgPost[];
+  reels: IgPost[];
+}
+
 export interface Stat {
   value: number;
   suffix: string;

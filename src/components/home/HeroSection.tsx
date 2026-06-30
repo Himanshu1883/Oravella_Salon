@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import { Link } from "@tanstack/react-router";
 import { gsap } from "@/lib/gsap";
 import { MEDIA } from "@/lib/media";
+import { CtaButton } from "@/components/ui/CtaButton";
 
 export function HeroSection() {
   const root = useRef<HTMLDivElement>(null);
@@ -47,18 +47,12 @@ export function HeroSection() {
           Precision. Creativity. Luxury. Every visit, an experience.
         </p>
         <div className="hero-cta mt-10 flex flex-wrap gap-4">
-          <Link
-            to="/contact"
-            className="inline-flex items-center px-8 py-4 bg-gold text-bg-primary text-[0.72rem] tracking-[0.3em] uppercase hover:bg-gold-muted transition"
-          >
+          <CtaButton to="/contact" onDark>
             Book Appointment
-          </Link>
-          <Link
-            to="/services"
-            className="inline-flex items-center px-8 py-4 border border-white/40 text-white text-[0.72rem] tracking-[0.3em] uppercase hover:bg-white hover:text-bg-primary transition"
-          >
+          </CtaButton>
+          <CtaButton to="/services" variant="outline" onDark>
             Explore Services
-          </Link>
+          </CtaButton>
         </div>
       </div>
 

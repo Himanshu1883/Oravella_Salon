@@ -6,6 +6,7 @@ import { MarqueeStrip } from "@/components/ui/MarqueeStrip";
 import { FaWhatsapp, FaInstagram } from "react-icons/fa";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { SITE, WHATSAPP_URL, waLink } from "@/lib/constants";
+import { CtaButton } from "@/components/ui/CtaButton";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -113,12 +114,9 @@ function ContactPage() {
                 />
               </div>
               <div className="sm:col-span-2 flex flex-wrap items-center gap-4 pt-2">
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-gold text-bg-primary text-[0.72rem] tracking-[0.3em] uppercase hover:bg-gold-muted transition"
-                >
+                <CtaButton type="submit" variant="whatsapp">
                   Send via WhatsApp <FaWhatsapp size={16} />
-                </button>
+                </CtaButton>
                 {sent && (
                   <span className="eyebrow text-gold">Opening WhatsApp…</span>
                 )}
@@ -159,21 +157,16 @@ function ContactPage() {
             </div>
 
             <div className="mt-10 flex flex-wrap gap-3">
-              <a
+              <CtaButton
                 href={waLink("Hi Orvella, I'd like to book an appointment.")}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-3 text-white text-[0.7rem] tracking-[0.25em] uppercase"
-                style={{ background: "#25D366" }}
+                variant="whatsapp"
+                compact
               >
                 <FaWhatsapp size={14} /> WhatsApp Now
-              </a>
-              <a
-                href={`tel:${SITE.phoneRaw}`}
-                className="inline-flex items-center gap-2 px-5 py-3 border border-gold text-gold text-[0.7rem] tracking-[0.25em] uppercase hover:bg-gold hover:text-bg-primary transition"
-              >
+              </CtaButton>
+              <CtaButton href={`tel:${SITE.phoneRaw}`} variant="ghost" compact>
                 <Phone size={14} /> Call
-              </a>
+              </CtaButton>
             </div>
           </aside>
         </div>

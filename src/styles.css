@@ -47,30 +47,31 @@
 :root,
 [data-theme="dark"] {
   --bg-primary: #080808;
-  --bg-secondary: #0f0f0f;
-  --bg-surface: #141414;
-  --accent-gold: #c9a84c;
-  --accent-gold-muted: #8a6f35;
-  --accent-gold-rgb: 201, 168, 76;
-  --text-primary: #fafaf8;
-  --text-secondary: #a89880;
-  --text-muted: #5c5248;
-  --border-subtle: rgba(201, 168, 76, 0.15);
+  --bg-secondary: #0f0a0b;
+  --bg-surface: #161012;
+  /* Brand accent — burgundy (tokens keep legacy "gold" names for Tailwind classes) */
+  --accent-gold: #8b2635;
+  --accent-gold-muted: #5c1f28;
+  --accent-gold-rgb: 139, 38, 53;
+  --text-primary: #faf8f8;
+  --text-secondary: #c4a8ad;
+  --text-muted: #6e565a;
+  --border-subtle: rgba(139, 38, 53, 0.2);
   --overlay: rgba(8, 8, 8, 0.85);
 }
 
 [data-theme="light"] {
-  --bg-primary: #faf8f4;
-  --bg-secondary: #f0ebe2;
-  --bg-surface: #ede6d9;
-  --accent-gold: #9b7a2f;
-  --accent-gold-muted: #c4a96b;
-  --accent-gold-rgb: 155, 122, 47;
-  --text-primary: #1a1208;
-  --text-secondary: #5c4b35;
-  --text-muted: #9e8c76;
-  --border-subtle: rgba(155, 122, 47, 0.2);
-  --overlay: rgba(250, 248, 244, 0.88);
+  --bg-primary: #faf6f6;
+  --bg-secondary: #f3eaea;
+  --bg-surface: #ebe0e2;
+  --accent-gold: #6b1d2a;
+  --accent-gold-muted: #a63d52;
+  --accent-gold-rgb: 107, 29, 42;
+  --text-primary: #1a0a0e;
+  --text-secondary: #5c3d42;
+  --text-muted: #9e7a80;
+  --border-subtle: rgba(107, 29, 42, 0.22);
+  --overlay: rgba(250, 246, 246, 0.88);
 }
 
 @layer base {
@@ -168,6 +169,141 @@ body::after {
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+.animated-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-weight: 600;
+  background-color: transparent;
+  border-radius: 100px;
+  color: var(--accent-gold);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-gold) 55%, transparent);
+  cursor: pointer;
+  overflow: hidden;
+  text-decoration: none;
+  transition:
+    box-shadow 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+    color 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button__label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: inherit;
+  transition: color 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button__label svg {
+  color: currentColor;
+  flex-shrink: 0;
+  transition: color 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button__blob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: var(--accent-gold);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button:hover {
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-gold) 38%, transparent);
+}
+
+.animated-button:hover .animated-button__label {
+  color: #ffffff;
+}
+
+.animated-button:hover .animated-button__blob {
+  width: 20px;
+  height: 20px;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(28);
+}
+
+.animated-button:active {
+  scale: 0.95;
+}
+
+/* Light surfaces — burgundy ring + text */
+.animated-button--ghost {
+  color: var(--accent-gold);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-gold) 55%, transparent);
+}
+
+/* Dark image / video overlays — white ring + text, burgundy fill on hover */
+.animated-button--on-dark,
+.animated-button--outline {
+  color: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.animated-button--on-dark:hover,
+.animated-button--outline:hover {
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-gold) 38%, transparent);
+}
+
+.animated-button--outline .animated-button__blob,
+.animated-button--on-dark .animated-button__blob {
+  background-color: var(--accent-gold);
+}
+
+/* WhatsApp — readable green on light pages */
+.animated-button--whatsapp {
+  color: #157a3c;
+  box-shadow: 0 0 0 2px color-mix(in srgb, #25d366 55%, transparent);
+}
+
+.animated-button--whatsapp .animated-button__blob {
+  background-color: #25d366;
+}
+
+.animated-button--whatsapp:hover {
+  box-shadow: 0 0 0 5px color-mix(in srgb, #25d366 45%, transparent);
+}
+
+.animated-button--whatsapp.animated-button--on-dark {
+  color: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0 0 2px color-mix(in srgb, #25d366 55%, transparent);
+}
+
+.animated-button--whatsapp.animated-button--on-dark:hover {
+  box-shadow: 0 0 0 5px color-mix(in srgb, #25d366 45%, transparent);
+}
+
+.animated-button--compact {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+}
+
+.animated-button:disabled,
+.animated-button[aria-disabled="true"] {
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
