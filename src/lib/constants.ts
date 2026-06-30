@@ -167,10 +167,10 @@ export const INSTAGRAM_POSTS: InstagramPost[] = [
 ];
 
 export const HERO_IMAGES = {
-  lounge: MEDIA.salonLounge,
-  chandelier: MEDIA.salonChandelier,
-  nails: MEDIA.salonNails,
-  lounge2: MEDIA.salonLounge2,
+  about: MEDIA.bannerAbout,
+  bridal: MEDIA.bannerBridal,
+  services: MEDIA.bannerServices,
+  contact: MEDIA.bannerContact,
 };
 
 const IG_REELS = [

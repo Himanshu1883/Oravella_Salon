@@ -5,7 +5,7 @@ import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { MarqueeStrip } from "@/components/ui/MarqueeStrip";
 import { FinalCTA } from "@/components/home/FinalCTA";
 import { CtaButton } from "@/components/ui/CtaButton";
-import { MEDIA } from "@/lib/media";
+import { MEDIA, PAGE_BANNERS } from "@/lib/media";
 
 const salonChandelier = { url: MEDIA.salonChandelier };
 const salonLounge = { url: MEDIA.salonLounge };
@@ -122,6 +122,8 @@ function ServicesPage() {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
+      gsap.from(".sv-hero-banner", { scale: 1.12, duration: 1.8, ease: "power3.out", delay: 0.1 });
+
       // Hero reveal
       gsap.from(".sv-hero-line", {
         yPercent: 110,
@@ -172,21 +174,23 @@ function ServicesPage() {
   return (
     <div ref={root} className="bg-bg-primary">
       {/* HERO */}
-      <section className="relative pt-40 pb-24 md:pt-56 md:pb-32 px-6 md:px-12 overflow-hidden">
+      <section className="relative pt-40 pb-24 md:pt-56 md:pb-32 px-6 md:px-12 overflow-hidden min-h-[min(72vh,820px)] flex items-end">
         <img
-          src={salonLounge2.url}
+          src={PAGE_BANNERS.services}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
+          className="sv-hero-banner absolute inset-0 w-full h-full object-cover"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-bg-primary/70 via-bg-primary/85 to-bg-primary" />
-        <div className="relative z-10 max-w-[1500px] mx-auto">
-          <SectionEyebrow>The Atelier Menu</SectionEyebrow>
-          <h1 className="heading-display mt-8 text-text-primary" style={{ fontSize: "clamp(3rem, 9vw, 9rem)", lineHeight: 0.95 }}>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/45 to-black/75" />
+        <div className="relative z-10 max-w-[1500px] mx-auto w-full">
+          <div className="[&_.eyebrow]:text-white/80">
+            <SectionEyebrow>The Atelier Menu</SectionEyebrow>
+          </div>
+          <h1 className="heading-display mt-8 text-white" style={{ fontSize: "clamp(3rem, 9vw, 9rem)", lineHeight: 0.95 }}>
             <span className="block overflow-hidden"><span className="sv-hero-line inline-block">Every service,</span></span>
             <span className="block overflow-hidden"><span className="sv-hero-line inline-block italic font-accent text-gold">an experience.</span></span>
           </h1>
-          <p className="sv-hero-sub mt-10 max-w-xl text-text-secondary text-lg leading-relaxed">
+          <p className="sv-hero-sub mt-10 max-w-xl text-white/75 text-lg leading-relaxed">
             A complete edit of hair, colour, skin, makeup, and nail services — each delivered
             with the same quiet precision and unhurried care.
           </p>

@@ -5,10 +5,8 @@ import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { MarqueeStrip } from "@/components/ui/MarqueeStrip";
 import { FinalCTA } from "@/components/home/FinalCTA";
 import { CtaButton } from "@/components/ui/CtaButton";
-import { MEDIA } from "@/lib/media";
+import { MEDIA, PAGE_BANNERS } from "@/lib/media";
 
-const bridalVideo = { url: MEDIA.bridalReel };
-const poster = { url: MEDIA.salonLounge };
 const lounge2 = { url: MEDIA.salonLounge2 };
 const chandelier = { url: MEDIA.salonChandelier };
 const nails = { url: MEDIA.salonNails };
@@ -63,7 +61,7 @@ const GALLERY = [
   { image: lounge2.url, span: "col-span-2 row-span-2" },
   { image: chandelier.url, span: "" },
   { image: nails.url, span: "" },
-  { image: poster.url, span: "col-span-2" },
+  { image: lounge2.url, span: "col-span-2" },
   { image: chandelier.url, span: "" },
   { image: nails.url, span: "" },
 ];
@@ -90,7 +88,7 @@ function BridalPage() {
         delay: 0.3,
       });
       gsap.from(".br-hero-sub, .br-hero-cta", { opacity: 0, y: 18, duration: 0.9, delay: 1.1, stagger: 0.1, ease: "power3.out" });
-      gsap.from(".br-hero-video", { scale: 1.15, duration: 2.4, ease: "power2.out" });
+      gsap.from(".br-hero-banner", { scale: 1.15, duration: 2.4, ease: "power2.out" });
 
       // Quote reveal
       const q = root.current!.querySelectorAll<HTMLSpanElement>(".br-quote-word");
@@ -133,11 +131,11 @@ function BridalPage() {
     <div ref={root} className="bg-bg-primary">
       {/* HERO */}
       <section className="relative h-screen min-h-[680px] overflow-hidden">
-        <video
-          className="br-hero-video absolute inset-0 w-full h-full object-cover"
-          autoPlay muted loop playsInline preload="metadata"
-          poster={poster.url}
-          src={bridalVideo.url}
+        <img
+          src={PAGE_BANNERS.bridal}
+          alt=""
+          className="br-hero-banner absolute inset-0 w-full h-full object-cover"
+          loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/95" />
         <div className="relative z-10 h-full flex flex-col justify-end px-6 md:px-16 pb-20 md:pb-28 max-w-[1500px] mx-auto">
@@ -152,8 +150,10 @@ function BridalPage() {
             recognisably herself on the most photographed day of her life.
           </p>
           <div className="br-hero-cta mt-10 flex flex-wrap gap-4">
-            <CtaButton to="/contact">Book Consultation</CtaButton>
-            <CtaButton href="#packages" variant="outline">
+            <CtaButton to="/contact" onDark>
+              Book Consultation
+            </CtaButton>
+            <CtaButton href="#packages" variant="outline" onDark>
               View Packages
             </CtaButton>
           </div>

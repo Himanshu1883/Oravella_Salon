@@ -5,12 +5,7 @@ import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { MarqueeStrip } from "@/components/ui/MarqueeStrip";
 import { FinalCTA } from "@/components/home/FinalCTA";
 import { CtaButton } from "@/components/ui/CtaButton";
-import { MEDIA } from "@/lib/media";
-
-const salonLounge = { url: MEDIA.salonLounge };
-const salonLounge2 = { url: MEDIA.salonLounge2 };
-const salonChandelier = { url: MEDIA.salonChandelier };
-const salonNails = { url: MEDIA.salonNails };
+import { MEDIA, PAGE_BANNERS } from "@/lib/media";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -52,7 +47,7 @@ function AboutPage() {
       gsap.from(".ab-hero-line", {
         yPercent: 110, opacity: 0, stagger: 0.12, duration: 1.2, ease: "power4.out", delay: 0.3,
       });
-      gsap.from(".ab-hero-img", { scale: 1.15, duration: 1.8, ease: "power3.out", delay: 0.2 });
+      gsap.from(".ab-hero-banner", { scale: 1.12, duration: 1.8, ease: "power3.out", delay: 0.2 });
       gsap.from(".ab-hero-sub", { opacity: 0, y: 20, duration: 0.9, delay: 1.0, ease: "power3.out" });
 
       // Reveal-on-scroll for story paragraphs
@@ -110,24 +105,27 @@ function AboutPage() {
   return (
     <div ref={root} className="bg-bg-primary">
       {/* HERO */}
-      <section className="relative pt-40 md:pt-56 pb-20 md:pb-32 px-6 md:px-12 overflow-hidden">
-        <div className="grid md:grid-cols-12 gap-10 md:gap-16 items-end max-w-[1500px] mx-auto">
-          <div className="md:col-span-7">
+      <section className="relative pt-40 pb-24 md:pt-56 md:pb-32 px-6 md:px-12 overflow-hidden min-h-[min(72vh,820px)] flex items-end">
+        <img
+          src={PAGE_BANNERS.about}
+          alt=""
+          className="ab-hero-banner absolute inset-0 w-full h-full object-cover"
+          loading="eager"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/45 to-black/75" />
+        <div className="relative z-10 max-w-[1500px] mx-auto w-full">
+          <div className="[&_.eyebrow]:text-white/80">
             <SectionEyebrow>Our Story</SectionEyebrow>
-            <h1 className="heading-display mt-8 text-text-primary" style={{ fontSize: "clamp(3rem, 8vw, 8rem)", lineHeight: 0.95 }}>
-              <span className="block overflow-hidden"><span className="ab-hero-line inline-block">Crafted</span></span>
-              <span className="block overflow-hidden"><span className="ab-hero-line inline-block">with</span></span>
-              <span className="block overflow-hidden"><span className="ab-hero-line inline-block italic font-accent text-gold">passion.</span></span>
-            </h1>
-            <p className="ab-hero-sub mt-8 max-w-lg text-text-secondary text-lg leading-relaxed">
-              Orvella is a love letter to slow beauty — a salon designed around how it
-              feels to be unhurried, listened to, and quietly transformed.
-            </p>
           </div>
-          <div className="md:col-span-5 relative overflow-hidden" style={{ aspectRatio: "4 / 5" }}>
-            <img src={salonLounge.url} alt="Orvella interior" className="ab-hero-img absolute inset-0 w-full h-full object-cover" loading="eager" />
-            <div className="absolute inset-0 pointer-events-none" style={{ boxShadow: "inset 0 0 0 6px var(--bg-primary), inset 0 0 0 7px var(--accent-gold-muted)" }} />
-          </div>
+          <h1 className="heading-display mt-8 text-white" style={{ fontSize: "clamp(3rem, 8vw, 8rem)", lineHeight: 0.95 }}>
+            <span className="block overflow-hidden"><span className="ab-hero-line inline-block">Crafted</span></span>
+            <span className="block overflow-hidden"><span className="ab-hero-line inline-block">with</span></span>
+            <span className="block overflow-hidden"><span className="ab-hero-line inline-block italic font-accent text-gold">passion.</span></span>
+          </h1>
+          <p className="ab-hero-sub mt-8 max-w-lg text-white/75 text-lg leading-relaxed">
+            Orvella is a love letter to slow beauty — a salon designed around how it
+            feels to be unhurried, listened to, and quietly transformed.
+          </p>
         </div>
       </section>
 
@@ -202,7 +200,7 @@ function AboutPage() {
 
       {/* PARALLAX INTERLUDE */}
       <section className="ab-parallax-section relative h-[60vh] min-h-[420px] overflow-hidden">
-        <img src={salonChandelier.url} alt="" className="ab-parallax absolute inset-0 w-full h-[120%] object-cover" loading="lazy" />
+        <img src={MEDIA.salonChandelier} alt="" className="ab-parallax absolute inset-0 w-full h-[120%] object-cover" loading="lazy" />
         <div className="absolute inset-0 bg-black/60" />
         <div className="absolute inset-0 grid place-items-center px-6">
           <p className="max-w-3xl text-center font-display italic text-white text-3xl md:text-5xl">

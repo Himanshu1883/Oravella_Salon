@@ -7,6 +7,7 @@ import { FaWhatsapp, FaInstagram } from "react-icons/fa";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { SITE, WHATSAPP_URL, waLink } from "@/lib/constants";
 import { CtaButton } from "@/components/ui/CtaButton";
+import { PAGE_BANNERS } from "@/lib/media";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -29,6 +30,7 @@ function ContactPage() {
       gsap.from(".ct-hero-line", {
         yPercent: 110, opacity: 0, stagger: 0.12, duration: 1.2, ease: "power4.out", delay: 0.3,
       });
+      gsap.from(".ct-hero-banner", { scale: 1.12, duration: 1.8, ease: "power3.out", delay: 0.2 });
       gsap.from(".ct-hero-sub", { opacity: 0, y: 18, duration: 0.9, delay: 0.9, ease: "power3.out" });
 
       gsap.from(".ct-form > *", {
@@ -73,15 +75,24 @@ function ContactPage() {
   return (
     <div ref={root} className="bg-bg-primary">
       {/* HERO */}
-      <section className="pt-40 md:pt-56 pb-16 md:pb-24 px-6 md:px-12">
-        <div className="mx-auto max-w-[1500px]">
-          <SectionEyebrow>Get In Touch</SectionEyebrow>
-          <h1 className="heading-display mt-8 text-text-primary" style={{ fontSize: "clamp(3rem, 9vw, 9rem)", lineHeight: 0.95 }}>
+      <section className="relative pt-40 pb-16 md:pt-56 md:pb-24 px-6 md:px-12 overflow-hidden min-h-[min(72vh,820px)] flex items-end">
+        <img
+          src={PAGE_BANNERS.contact}
+          alt=""
+          className="ct-hero-banner absolute inset-0 w-full h-full object-cover"
+          loading="eager"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/45 to-black/75" />
+        <div className="relative z-10 mx-auto max-w-[1500px] w-full">
+          <div className="[&_.eyebrow]:text-white/80">
+            <SectionEyebrow>Get In Touch</SectionEyebrow>
+          </div>
+          <h1 className="heading-display mt-8 text-white" style={{ fontSize: "clamp(3rem, 9vw, 9rem)", lineHeight: 0.95 }}>
             <span className="block overflow-hidden"><span className="ct-hero-line inline-block">Let's create</span></span>
             <span className="block overflow-hidden"><span className="ct-hero-line inline-block">something</span></span>
             <span className="block overflow-hidden"><span className="ct-hero-line inline-block italic font-accent text-gold">beautiful.</span></span>
           </h1>
-          <p className="ct-hero-sub mt-8 max-w-lg text-text-secondary text-lg leading-relaxed">
+          <p className="ct-hero-sub mt-8 max-w-lg text-white/75 text-lg leading-relaxed">
             Reach us by phone, WhatsApp, or the form below — and our team will personally
             confirm your appointment.
           </p>
