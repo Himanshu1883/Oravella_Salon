@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { gsap } from "@/lib/gsap";
 import { IG_PROFILE, SITE } from "@/lib/constants";
+import { MEDIA } from "@/lib/media";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import type { IgPost } from "@/types";
 
@@ -217,9 +218,9 @@ export function InstagramSection() {
                 <div className="rounded-full bg-gradient-to-tr from-[#feda75] via-[#d62976] to-[#962fbf] p-[3px]">
                   <div className="rounded-full bg-bg-primary p-[3px]">
                     <img
-                      src={p.highlights[3].cover}
+                      src={MEDIA.logoMark}
                       alt={p.handle}
-                      className="h-20 w-20 rounded-full object-cover md:h-36 md:w-36"
+                      className="h-20 w-20 rounded-full object-contain bg-black md:h-36 md:w-36"
                     />
                   </div>
                 </div>

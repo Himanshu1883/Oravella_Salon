@@ -39,11 +39,15 @@ export function Navbar() {
         )}
       >
         <div className="mx-auto max-w-[1600px] flex items-center justify-between px-6 md:px-12">
-          <Link to="/" className="flex items-center gap-3 group">
-            <img src={MEDIA.logo} alt="Orvella" className="h-10 w-10 object-contain" />
+          <Link to="/" className="flex items-center gap-3 md:gap-4 group shrink-0">
+            <img
+              src={MEDIA.logo}
+              alt="Orvella Salon"
+              className="h-14 md:h-[4.25rem] w-auto object-contain"
+            />
             <span
               className={cn(
-                "hidden sm:inline font-display text-xl tracking-[0.25em]",
+                "font-display text-lg sm:text-xl md:text-2xl tracking-[0.2em] sm:tracking-[0.25em]",
                 overDarkHero ? "text-white" : "text-text-primary"
               )}
             >

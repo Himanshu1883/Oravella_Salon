@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { NAV_LINKS, SITE, SOCIAL_LINKS } from "@/lib/constants";
+import { MEDIA } from "@/lib/media";
 
 const FOOTER_HOURS = "Mon – Sun — 10:00 AM – 9:00 PM";
 
@@ -14,14 +15,18 @@ export function Footer() {
       <div className="relative z-10 mx-auto max-w-[1600px] px-8 md:px-16 pt-20 pb-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-10">
         {/* Brand */}
         <div className="sm:col-span-2 lg:col-span-1">
-          <div
-            className="font-display text-text-primary tracking-[0.12em]"
-            style={{ fontSize: "clamp(2.5rem, 4vw, 3.5rem)", lineHeight: 1 }}
-          >
-            ORVELLA
-          </div>
+          <Link to="/" className="inline-flex items-center gap-3 md:gap-4">
+            <img
+              src={MEDIA.logo}
+              alt="Orvella Salon"
+              className="h-20 md:h-24 w-auto shrink-0 object-contain"
+            />
+            <span className="font-display text-2xl md:text-3xl tracking-[0.2em] md:tracking-[0.25em] text-text-primary">
+              ORVELLA
+            </span>
+          </Link>
           <p className="mt-3 text-[0.65rem] tracking-[0.28em] uppercase text-text-muted">
-            Salon — Est. Lajpat Nagar
+            Est. Lajpat Nagar, New Delhi
           </p>
           <p className="mt-6 font-display italic text-text-secondary text-base md:text-lg leading-relaxed max-w-xs">
             {SITE.tagline}
@@ -106,11 +111,13 @@ export function Footer() {
       </div>
 
       {/* Ghost watermark */}
-      <div aria-hidden className="relative pointer-events-none select-none py-4 md:py-8 overflow-hidden">
+      <div
+        aria-hidden
+        className="relative pointer-events-none select-none overflow-hidden px-3 py-4 md:px-6 md:py-8"
+      >
         <p
-          className="text-center font-display font-normal whitespace-nowrap text-text-primary"
+          className="text-center font-display font-normal whitespace-nowrap text-text-primary text-[clamp(5.75rem,18vw,16rem)] md:text-[clamp(7rem,22vw,16rem)]"
           style={{
-            fontSize: "clamp(7rem, 22vw, 16rem)",
             lineHeight: 0.9,
             letterSpacing: "0.03em",
             opacity: 0.055,

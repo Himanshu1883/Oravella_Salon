@@ -11,6 +11,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import favicon from "@/assets/orvella logo png.png";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CtaButton } from "@/components/ui/CtaButton";
@@ -81,6 +82,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fb2ff43b-252d-4bd9-b0aa-97f9d8999861/id-preview-31f90b67--d1b2f3a5-a7d0-43a9-97ed-5d90348e9393.lovable.app-1782715819852.png" },
     ],
     links: [
+      { rel: "icon", type: "image/png", sizes: "32x32", href: favicon },
+      { rel: "icon", type: "image/png", sizes: "192x192", href: favicon },
+      { rel: "apple-touch-icon", sizes: "180x180", href: favicon },
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },

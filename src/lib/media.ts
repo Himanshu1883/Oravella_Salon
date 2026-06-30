@@ -1,4 +1,5 @@
-import logo from "@/assets/logo_orvellasalon.PNG";
+import logo from "@/assets/orvella logo png.png";
+import logoMark from "@/assets/logo_orvellasalon.PNG";
 import heroVideo from "@/assets/new_video.mp4";
 import ambientReel from "@/assets/WhatsApp Video 2026-06-29 at 11.33.31 AM (1).mp4";
 import bridalReel from "@/assets/WhatsApp Video 2026-06-29 at 11.33.31 AM.mp4";
@@ -15,6 +16,7 @@ import bannerContact from "@/assets/A_clean_and_minimalist_16_9_202606301546.jpe
 
 export const MEDIA = {
   logo,
+  logoMark,
   heroVideo,
   ambientReel,
   bridalReel,

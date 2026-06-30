@@ -196,7 +196,7 @@ export const IG_PROFILE: IgProfile = {
     { label: "Colour", cover: MEDIA.salonChandelier },
     { label: "Men's", cover: MEDIA.salonNails },
     { label: "Offers", cover: MEDIA.salonExtra1 },
-    { label: "What We Have", cover: MEDIA.logo },
+    { label: "What We Have", cover: MEDIA.logoMark },
   ],
   posts: [
     { type: "image", src: MEDIA.salonLounge, caption: "Quiet luxury, every visit." },
