@@ -22,9 +22,12 @@ export function useLenisScroll() {
     gsap.ticker.add(ticker);
     gsap.ticker.lagSmoothing(0);
 
+    (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+
     return () => {
       gsap.ticker.remove(ticker);
       lenis.destroy();
+      delete (window as unknown as { __lenis?: Lenis }).__lenis;
     };
   }, []);
 }

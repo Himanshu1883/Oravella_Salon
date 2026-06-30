@@ -42,6 +42,7 @@ export const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
   { label: "Bridal", href: "/bridal" },
+  { label: "Gallery", href: "/gallery" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;
@@ -304,4 +305,68 @@ export const TRANSFORMATIONS: Transformation[] = [
   { before: MEDIA.salonLounge, after: MEDIA.salonChandelier, label: "Colour & Cut" },
   { before: MEDIA.salonNails, after: MEDIA.salonLounge2, label: "Bridal Glam" },
   { before: MEDIA.salonExtra1, after: MEDIA.salonExtra2, label: "Keratin Smooth" },
+];
+
+export interface GalleryItem {
+  image: string;
+  title: string;
+  year: string;
+  text: string;
+}
+
+export const GALLERY_ITEMS: GalleryItem[] = [
+  {
+    image: MEDIA.salonLounge,
+    title: "The Lounge",
+    year: "01 — Space",
+    text: "A softly lit room designed around the way light moves across the day.",
+  },
+  {
+    image: MEDIA.salonChandelier,
+    title: "Gilded Glow",
+    year: "02 — Detail",
+    text: "Hand-finished brass and warm light — every fixture chosen on purpose.",
+  },
+  {
+    image: MEDIA.salonNails,
+    title: "Polished",
+    year: "03 — Nails",
+    text: "Precise, considered nail artistry that completes the whole look.",
+  },
+  {
+    image: MEDIA.salonLounge2,
+    title: "Quiet Corners",
+    year: "04 — Space",
+    text: "Private nooks for the unhurried moments between transformations.",
+  },
+  {
+    image: MEDIA.salonExtra1,
+    title: "Bridal Suite",
+    year: "05 — Bridal",
+    text: "A dedicated wing where a bride's morning belongs entirely to her.",
+  },
+  {
+    image: MEDIA.salonExtra2,
+    title: "The Finish",
+    year: "06 — Craft",
+    text: "The last considered touch — colour, texture, and shine in balance.",
+  },
+  {
+    image: MEDIA.salonChandelier,
+    title: "Warm Light",
+    year: "07 — Detail",
+    text: "Ambient layers of light tuned for calm and for camera alike.",
+  },
+  {
+    image: MEDIA.salonLounge,
+    title: "Stillness",
+    year: "08 — Space",
+    text: "Nothing loud, nothing rushed — a space that lets you exhale.",
+  },
+  {
+    image: MEDIA.salonNails,
+    title: "Handwork",
+    year: "09 — Craft",
+    text: "Confident hands and careful listening, in every appointment.",
+  },
 ];

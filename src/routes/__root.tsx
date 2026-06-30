@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -113,6 +114,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  // The gallery is a Locomotive-driven full-screen experience that renders its
+  // own footer inside the scroll area, so we hide the global one there.
+  const isGallery = pathname === "/gallery";
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -125,7 +130,7 @@ function RootComponent() {
             <Outlet />
           </PageTransition>
         </main>
-        <Footer />
+        {!isGallery && <Footer />}
         <WhatsAppFloat />
       </ThemeProvider>
     </QueryClientProvider>
