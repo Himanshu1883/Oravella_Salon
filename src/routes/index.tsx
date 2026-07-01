@@ -7,7 +7,6 @@ import { QuoteBreak } from "@/components/home/QuoteBreak";
 import { Transformations } from "@/components/home/Transformations";
 import { InstagramSection } from "@/components/home/InstagramSection";
 import { Testimonials } from "@/components/home/Testimonials";
-import { FinalCTA } from "@/components/home/FinalCTA";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,11 +27,11 @@ function Home() {
       <AboutIntro />
       <SalonShowcase />
       <ServicesPreview />
-      <QuoteBreak />
-      <Transformations />
+      <QuoteBreak>
+        <Transformations />
+      </QuoteBreak>
       <InstagramSection />
       <Testimonials />
-      <FinalCTA />
     </>
   );
 }

@@ -190,7 +190,7 @@ export function InstagramSection() {
   const p = IG_PROFILE;
 
   return (
-    <section ref={root} className="bg-bg-primary px-4 py-16 sm:px-6 md:px-10 md:py-24 lg:px-14">
+    <section ref={root} className="relative bg-bg-primary px-4 py-16 sm:px-6 md:px-10 md:py-24 lg:px-14">
       <div className="ig-section-header mx-auto mb-12 max-w-3xl text-center md:mb-16">
         <SectionEyebrow>Follow Our Story</SectionEyebrow>
         <h2 className="heading-display mt-6 text-text-primary text-4xl md:text-6xl">
@@ -265,11 +265,11 @@ export function InstagramSection() {
                 </div>
 
                 {/* Row 2: stats (desktop) */}
-                <div className="mt-5 hidden gap-10 text-base md:flex">
+                {/* <div className="mt-5 hidden gap-10 text-base md:flex">
                   <StatItem value={p.stats.posts} label="posts" />
                   <StatItem value={p.stats.followers} label="followers" />
                   <StatItem value={p.stats.following} label="following" />
-                </div>
+                </div> */}
 
                 {/* Row 3: name + bio (desktop) */}
                 <div className="mt-5 hidden md:block">

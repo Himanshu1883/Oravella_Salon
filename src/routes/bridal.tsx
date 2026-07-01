@@ -3,7 +3,6 @@ import { useLayoutEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { MarqueeStrip } from "@/components/ui/MarqueeStrip";
-import { FinalCTA } from "@/components/home/FinalCTA";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { MEDIA, PAGE_BANNERS } from "@/lib/media";
 
@@ -255,7 +254,6 @@ function BridalPage() {
         </div>
       </section>
 
-      <FinalCTA />
     </div>
   );
 }

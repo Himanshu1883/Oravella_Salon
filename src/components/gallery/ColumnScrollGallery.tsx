@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { MEDIA } from "@/lib/media";
-import { Footer } from "@/components/layout/Footer";
+import { PreFooterZone } from "@/components/layout/PreFooterBanner";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import "./column-scroll.css";
 
@@ -497,11 +497,10 @@ export function ColumnScrollGallery() {
     lenis?.stop();
 
     (async () => {
-      const [{ default: LocomotiveScroll }, imagesLoadedMod] = await Promise.all([
+      const [{ default: LocomotiveScroll }, { default: imagesLoaded }] = await Promise.all([
         import("locomotive-scroll"),
         import("imagesloaded"),
       ]);
-      const imagesLoaded = (imagesLoadedMod as { default: (...args: unknown[]) => void }).default;
       if (destroyed) return;
 
       await new Promise<void>((resolve) => {
@@ -587,7 +586,7 @@ export function ColumnScrollGallery() {
         </div>
 
         <div className="cs-footer" data-scroll-section="">
-          <Footer />
+          <PreFooterZone />
         </div>
       </div>
 

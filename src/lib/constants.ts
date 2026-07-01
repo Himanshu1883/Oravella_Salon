@@ -410,3 +410,40 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     text: "Confident hands and careful listening, in every appointment.",
   },
 ];
+
+export type PreFooterImageKey = "home" | "about" | "bridal" | "services" | "contact";
+
+export interface PreFooterContent {
+  eyebrow: string;
+  quote: string;
+  imageKey: PreFooterImageKey;
+}
+
+export const PRE_FOOTER_DEFAULT: PreFooterContent = {
+  eyebrow: "Orvella Salon · New Delhi",
+  quote: "Where craft meets quiet luxury.",
+  imageKey: "home",
+};
+
+export const PRE_FOOTER_BY_ROUTE: Partial<Record<string, PreFooterContent>> = {
+  "/about": {
+    eyebrow: "The Orvella Story",
+    quote: "Beauty, held with intention.",
+    imageKey: "about",
+  },
+  "/bridal": {
+    eyebrow: "Bridal Atelier",
+    quote: "Every bride deserves her quiet morning.",
+    imageKey: "bridal",
+  },
+  "/services": {
+    eyebrow: "Our Craft",
+    quote: "Precision is a form of devotion.",
+    imageKey: "services",
+  },
+  "/contact": {
+    eyebrow: "Visit Us",
+    quote: "Your chair is waiting.",
+    imageKey: "contact",
+  },
+};

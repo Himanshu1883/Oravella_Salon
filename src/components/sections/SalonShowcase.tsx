@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { gsap } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { MEDIA } from "@/lib/media";
 
@@ -100,17 +100,6 @@ export function SalonShowcase() {
       });
 
       gsap.fromTo(
-        ".nail-strip",
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          scrollTrigger: { trigger: ".nail-strip", start: "top 85%" },
-        },
-      );
-
-      gsap.fromTo(
         ".reel-copy > *",
         { opacity: 0, y: 28 },
         {
@@ -141,7 +130,7 @@ export function SalonShowcase() {
 
   return (
     <div ref={root} className="bg-bg-primary">
-      <section className="relative px-6 pt-8 md:px-12 md:pt-10">
+      <section className="relative px-6 pt-8 pb-4 md:px-12 md:pt-10 md:pb-6">
         <div className="mx-auto mb-14 max-w-3xl text-center md:mb-16">
           <SectionEyebrow>Inside The Salon</SectionEyebrow>
           <h2 className="heading-display mt-6 text-3xl leading-tight text-text-primary md:text-5xl">
@@ -150,7 +139,7 @@ export function SalonShowcase() {
           </h2>
         </div>
 
-        <div className="mx-auto flex max-w-[1400px] flex-col gap-14 md:gap-20">
+        <div className="mx-auto flex max-w-[1400px] flex-col gap-14 md:gap-20 relative z-10">
           {FEATURES.map((f, i) => (
             <div
               key={f.title}
@@ -191,57 +180,133 @@ export function SalonShowcase() {
         </div>
       </section>
 
-      {/* Beyond Hair — true full viewport width */}
-      <div className="nail-strip relative mt-20 w-full md:mt-24">
-        <div className="relative min-h-[min(52vh,520px)] w-full md:min-h-[min(58vh,600px)]">
-          <img
-            src={MEDIA.salonNailStudio}
-            alt="Nail extension studio"
-            loading="lazy"
-            draggable={false}
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/55 to-black/25" />
-          <div className="relative z-10 flex min-h-[inherit] w-full items-center">
-            <div className="w-full px-8 py-16 md:px-16 md:py-20 lg:px-[max(2rem,calc((100vw-1400px)/2+4rem))]">
-              <p className="eyebrow text-[#c9a87c]">Beyond Hair</p>
-              <h3 className="heading-display mt-4 max-w-2xl text-3xl leading-tight text-white md:text-5xl lg:text-[3.25rem]">
-                A dedicated nail extension studio, for the days you want the full reset.
-              </h3>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">
-                Gel extensions, structured manicures, and nail art in a quiet corner of the salon —
-                finished with the same care and hygiene standards as everything else we do.
-              </p>
+      {/* Beyond Hair — sticky full-bleed image, copy + reels scroll over */}
+      <BeyondHairStickyBand>
+        <div className="reel-wrap relative z-20 w-full bg-bg-secondary">
+          <div className="reel-copy mx-auto max-w-3xl px-8 py-14 text-center md:py-20">
+            <div className="flex justify-center">
+              <SectionEyebrow>Watch The Space</SectionEyebrow>
+            </div>
+            <h3 className="heading-display mt-6 text-3xl leading-tight text-text-primary md:text-5xl lg:text-[3.25rem]">
+              Two minutes inside{" "}
+              <em className="font-accent italic text-gold">Orvella.</em>
+            </h3>
+            <p className="mx-auto mt-6 max-w-2xl leading-relaxed text-text-secondary md:text-lg">
+              Walk through the wash bar, the styling floor, and the light we calibrate for colour
+              work — the same rooms you will sit in on your first visit.
+            </p>
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-text-muted md:text-base">
+              Tap unmute on either reel. Videos play automatically as you scroll.
+            </p>
+          </div>
+
+          <div className="px-6 pb-14 md:px-12 md:pb-20 lg:px-20">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-stretch sm:gap-6">
+              <ReelCard src={MEDIA.salonReel1} poster={MEDIA.salonChandelier} fullBleed />
+              <ReelCard src={MEDIA.salonReel2} poster={MEDIA.salonLounge} fullBleed />
             </div>
           </div>
         </div>
+      </BeyondHairStickyBand>
+    </div>
+  );
+}
+
+function BeyondHairStickyBand({ children }: { children: React.ReactNode }) {
+  const zone = useRef<HTMLDivElement>(null);
+  const track = useRef<HTMLDivElement>(null);
+  const copy = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const ctx = gsap.context(() => {
+      const trackEl = track.current;
+      if (!trackEl) return;
+
+      if (reduce) {
+        gsap.set(copy.current, { opacity: 1, yPercent: 0 });
+        return;
+      }
+
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: trackEl,
+            start: "top 78%",
+            end: "bottom 22%",
+            scrub: 0.55,
+            invalidateOnRefresh: true,
+          },
+        })
+        .fromTo(
+          copy.current,
+          { yPercent: 42, opacity: 0 },
+          { yPercent: 0, opacity: 1, ease: "power2.out", duration: 0.35 },
+        )
+        .to(copy.current, { yPercent: 0, opacity: 1, duration: 0.32 })
+        .to(copy.current, { yPercent: -42, opacity: 0, ease: "power2.in", duration: 0.33 });
+    }, zone);
+
+    const refresh = () => ScrollTrigger.refresh();
+    const t = window.setTimeout(refresh, 300);
+
+    return () => {
+      window.clearTimeout(t);
+      ctx.revert();
+    };
+  }, []);
+
+  return (
+    <div
+      ref={zone}
+      className="nail-strip-zone relative z-0 mt-12 w-full bg-black md:mt-16"
+      aria-label="Beyond Hair"
+    >
+      <div
+        className="nail-strip__bg sticky top-0 z-0 h-screen w-full overflow-hidden"
+        aria-hidden="true"
+      >
+        <img
+          src={MEDIA.salonNailStudio}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover object-center max-md:object-[center_30%]"
+          loading="lazy"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-black/35" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/55 to-black/25" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 38%, transparent 62%, rgba(0,0,0,0.4) 100%)",
+          }}
+        />
       </div>
 
-      {/* Watch The Space — centered copy, videos below */}
-      <div className="reel-wrap relative w-full bg-bg-secondary">
-        <div className="reel-copy mx-auto max-w-3xl px-8 py-14 text-center md:py-20">
-          <div className="flex justify-center">
-            <SectionEyebrow>Watch The Space</SectionEyebrow>
+      <div className="relative z-10 -mt-[100vh]">
+        <div
+          ref={track}
+          className="nail-strip__track relative flex min-h-[480px] h-[85vh] w-full items-center md:min-h-[520px] md:h-[90vh]"
+        >
+          <div
+            ref={copy}
+            className="nail-strip__copy w-full px-8 py-16 md:px-16 md:py-20 lg:px-[max(2rem,calc((100vw-1400px)/2+4rem))]"
+          >
+            <p className="nail-strip__eyebrow eyebrow text-[#c9a87c]">Beyond Hair</p>
+            <h3 className="heading-display mt-4 max-w-2xl text-3xl leading-tight text-white md:text-5xl lg:text-[3.25rem]">
+              A dedicated nail extension studio, for the days you want the full reset.
+            </h3>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">
+              Gel extensions, structured manicures, and nail art in a quiet corner of the salon —
+              finished with the same care and hygiene standards as everything else we do.
+            </p>
           </div>
-          <h3 className="heading-display mt-6 text-3xl leading-tight text-text-primary md:text-5xl lg:text-[3.25rem]">
-            Two minutes inside{" "}
-            <em className="font-accent italic text-gold">Orvella.</em>
-          </h3>
-          <p className="mx-auto mt-6 max-w-2xl leading-relaxed text-text-secondary md:text-lg">
-            Walk through the wash bar, the styling floor, and the light we calibrate for colour
-            work — the same rooms you will sit in on your first visit.
-          </p>
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-text-muted md:text-base">
-            Tap unmute on either reel. Videos play automatically as you scroll.
-          </p>
         </div>
 
-        <div className="px-6 pb-14 md:px-12 md:pb-20 lg:px-20">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
-            <ReelCard src={MEDIA.salonReel1} poster={MEDIA.salonChandelier} fullBleed />
-            <ReelCard src={MEDIA.salonReel2} poster={MEDIA.salonLounge} fullBleed />
-          </div>
-        </div>
+        {children}
       </div>
     </div>
   );
@@ -289,7 +354,7 @@ function ReelCard({
     <div
       ref={wrapRef}
       className={`reel-card relative overflow-hidden bg-black ${
-        fullBleed ? "h-[min(85vh,880px)] w-full rounded-2xl" : ""
+        fullBleed ? "h-[100vh] min-h-[520px] w-full rounded-2xl" : ""
       }`}
       style={fullBleed ? undefined : { aspectRatio: "9 / 16", borderRadius: "28px" }}
     >

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { NAV_LINKS } from "@/lib/constants";
+import { useBookingModal } from "@/components/booking/BookingModalProvider";
 import { useTheme } from "@/components/ThemeProvider";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { MEDIA } from "@/lib/media";
@@ -15,6 +16,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { theme, toggle } = useTheme();
+  const { openBooking } = useBookingModal();
   const overDarkHero = !scrolled && DARK_HERO_ROUTES.includes(pathname);
 
   useEffect(() => {
@@ -90,7 +92,7 @@ export function Navbar() {
               {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
             </button>
             <CtaButton
-              to="/contact"
+              onClick={() => openBooking()}
               variant="ghost"
               compact
               onDark={overDarkHero}
@@ -138,6 +140,21 @@ export function Navbar() {
               {l.label}
             </Link>
           ))}
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              openBooking();
+            }}
+            className="font-display text-5xl text-gold transition-colors hover:text-gold-muted"
+            style={{
+              opacity: open ? 1 : 0,
+              transform: open ? "translateY(0)" : "translateY(30px)",
+              transition: `opacity .6s ease ${0.2 + NAV_LINKS.length * 0.08}s, transform .6s ease ${0.2 + NAV_LINKS.length * 0.08}s`,
+            }}
+          >
+            Book Now
+          </button>
         </nav>
       </div>
     </>

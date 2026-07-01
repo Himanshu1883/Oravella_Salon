@@ -16,8 +16,9 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { BookingModalProvider } from "@/components/booking/BookingModalProvider";
 import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { PreFooterZone } from "@/components/layout/PreFooterBanner";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { PageTransition } from "@/components/layout/PageTransition";
@@ -124,16 +125,18 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <SmoothScroll />
-        <ScrollProgress />
-        <Navbar />
-        <main>
-          <PageTransition>
-            <Outlet />
-          </PageTransition>
-        </main>
-        {!isGallery && <Footer />}
-        <WhatsAppFloat />
+        <BookingModalProvider>
+          <SmoothScroll />
+          <ScrollProgress />
+          <Navbar />
+          <main>
+            <PageTransition>
+              <Outlet />
+            </PageTransition>
+          </main>
+          {!isGallery && <PreFooterZone />}
+          <WhatsAppFloat />
+        </BookingModalProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
