@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { HeroSection } from "@/components/home/HeroSection";
-import { AboutTeaser } from "@/components/home/AboutTeaser";
+import { AboutIntro } from "@/components/sections/AboutIntro";
+import { SalonShowcase } from "@/components/sections/SalonShowcase";
 import { ServicesPreview } from "@/components/home/ServicesPreview";
 import { QuoteBreak } from "@/components/home/QuoteBreak";
 import { Transformations } from "@/components/home/Transformations";
@@ -24,7 +25,8 @@ function Home() {
   return (
     <>
       <HeroSection />
-      <AboutTeaser />
+      <AboutIntro />
+      <SalonShowcase />
       <ServicesPreview />
       <QuoteBreak />
       <Transformations />

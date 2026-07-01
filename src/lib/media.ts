@@ -1,3 +1,5 @@
+import hairReelPrimary from "@/assets/MOV_4315.MOV";
+import hairReelSecondary from "@/assets/MOV_4303.MOV";
 import logo from "@/assets/orvella logo png.png";
 import logoMark from "@/assets/logo_orvellasalon.PNG";
 import heroVideo from "@/assets/hero-banner.mp4";
@@ -30,6 +32,16 @@ export const MEDIA = {
   bannerBridal,
   bannerServices,
   bannerContact,
+  hairReelPrimary,
+  hairReelSecondary,
+  /** Salon showcase — swap imports when clean caption-free assets arrive */
+  salonReception: bannerAbout,
+  salonRelaxationLounge: salonLounge2,
+  salonMinimalLuxury: salonLounge,
+  salonHairProducts: bannerServices,
+  salonNailStudio: salonNails,
+  salonReel1: ambientReel,
+  salonReel2: bridalReel,
 } as const;
 
 /** Full-width hero banners for inner pages (not homepage) */
