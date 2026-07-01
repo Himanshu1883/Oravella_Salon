@@ -449,24 +449,6 @@ body::after {
   background-color: rgba(255, 255, 255, 0.06);
 }
 
-/* Quote break — match GSAP initial state before hydration */
-@media (prefers-reduced-motion: no-preference) {
-  .quote-break .q-word {
-    opacity: 0.08;
-  }
-
-  .quote-break .quote-eyebrow,
-  .quote-break .quote-support,
-  .quote-break .quote-attribution,
-  .quote-break .quote-mark {
-    opacity: 0;
-  }
-
-  .quote-break .quote-rule {
-    transform: scaleX(0);
-  }
-}
-
 /* Before / after transformation sliders */
 .ba-card {
   contain: layout paint;
