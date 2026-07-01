@@ -1,13 +1,13 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { n as gsapWithCSS } from "../_libs/gsap.mjs";
-import { a as SERVICES, c as TESTIMONIALS, l as TRANSFORMATIONS, n as MEDIA, o as SITE, t as IG_PROFILE } from "./constants-CuQpxFf8.mjs";
+import { a as SERVICES, c as TESTIMONIALS, l as TRANSFORMATIONS, n as MEDIA, o as SITE, t as IG_PROFILE } from "./constants-DQnu0zFC.mjs";
 import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as SectionEyebrow } from "./SectionEyebrow-DcGyr-l9.mjs";
-import { t as FinalCTA } from "./FinalCTA-DjoHaFtR.mjs";
+import { t as FinalCTA } from "./FinalCTA-BOrW8x6d.mjs";
 import { _ as Grid3x3, a as Play, c as MessageCircle, f as Heart, g as SquareUser, h as Camera, i as Plus, m as Clapperboard, r as Settings } from "../_libs/lucide-react.mjs";
 import { a as SwiperSlide, i as Swiper, n as Autoplay, r as Pagination, t as EffectFade } from "../_libs/swiper.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-GvtejYiX.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-Ds5J9GK5.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function HeroSection() {
@@ -1037,59 +1037,52 @@ function QuoteBreak() {
 		]
 	});
 }
-var easeInOut = (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-var easeOut = (t) => 1 - Math.pow(1 - t, 2);
-function animateValue(from, to, durationMs, ease, onUpdate, isCancelled) {
-	return new Promise((resolve) => {
-		const start = performance.now();
-		const tick = (now) => {
-			if (isCancelled()) {
-				resolve();
-				return;
-			}
-			const t = Math.min(1, (now - start) / durationMs);
-			onUpdate(from + (to - from) * ease(t));
-			if (t < 1) requestAnimationFrame(tick);
-			else resolve();
-		};
-		requestAnimationFrame(tick);
-	});
+function freezeSplit(el) {
+	const split = getComputedStyle(el).getPropertyValue("--split").trim() || "50";
+	el.style.setProperty("--split", split);
+	el.classList.remove("ba-card--demo");
 }
-function delay(ms, isCancelled) {
-	return new Promise((resolve) => {
-		const id = window.setTimeout(() => {
-			if (!isCancelled()) resolve();
-		}, ms);
-		if (isCancelled()) {
-			clearTimeout(id);
-			resolve();
+async function decodeCardImages(el) {
+	const imgs = el.querySelectorAll("img");
+	await Promise.all([...imgs].map((img) => new Promise((resolve) => {
+		if (img.complete) resolve();
+		else {
+			img.addEventListener("load", () => resolve(), { once: true });
+			img.addEventListener("error", () => resolve(), { once: true });
 		}
-	});
+	})));
+	await Promise.all([...imgs].map((img) => img.decode?.().catch(() => void 0) ?? Promise.resolve()));
 }
-function BeforeAfterSlider({ before, after, label, index = 0, inView = false }) {
+function BeforeAfterSlider({ before, after, label, index = 0, inView = false, shouldDemo = false, onDemoEnd }) {
 	const container = (0, import_react.useRef)(null);
 	const valueRef = (0, import_react.useRef)(50);
 	const [showHint, setShowHint] = (0, import_react.useState)(true);
 	const [isDemoing, setIsDemoing] = (0, import_react.useState)(false);
 	const dragging = (0, import_react.useRef)(false);
 	const userTouched = (0, import_react.useRef)(false);
+	const dragRaf = (0, import_react.useRef)(0);
+	const pendingX = (0, import_react.useRef)(0);
 	const applySplit = (0, import_react.useCallback)((pct) => {
 		const clamped = Math.max(0, Math.min(100, pct));
 		valueRef.current = clamped;
-		const el = container.current;
-		if (!el) return;
-		el.style.setProperty("--split", String(clamped));
+		container.current?.style.setProperty("--split", String(clamped));
 	}, []);
-	const setFromClientX = (0, import_react.useCallback)((clientX) => {
+	const flushDrag = (0, import_react.useCallback)(() => {
+		dragRaf.current = 0;
 		const el = container.current;
 		if (!el) return;
 		const rect = el.getBoundingClientRect();
-		applySplit((clientX - rect.left) / rect.width * 100);
+		applySplit((pendingX.current - rect.left) / rect.width * 100);
 	}, [applySplit]);
+	const queueDrag = (0, import_react.useCallback)((clientX) => {
+		pendingX.current = clientX;
+		if (!dragRaf.current) dragRaf.current = requestAnimationFrame(flushDrag);
+	}, [flushDrag]);
 	const stopDemo = (0, import_react.useCallback)(() => {
 		if (userTouched.current) return;
 		userTouched.current = true;
-		container.current?.classList.remove("is-active");
+		const el = container.current;
+		if (el) freezeSplit(el);
 		setIsDemoing(false);
 		setShowHint(false);
 	}, []);
@@ -1097,9 +1090,12 @@ function BeforeAfterSlider({ before, after, label, index = 0, inView = false }) 
 		applySplit(50);
 	}, [applySplit]);
 	(0, import_react.useEffect)(() => {
-		const onMove = (e) => dragging.current && setFromClientX(e.clientX);
-		const onTouch = (e) => dragging.current && e.touches[0] && setFromClientX(e.touches[0].clientX);
-		const stop = () => dragging.current = false;
+		const onMove = (e) => dragging.current && queueDrag(e.clientX);
+		const onTouch = (e) => dragging.current && e.touches[0] && queueDrag(e.touches[0].clientX);
+		const stop = () => {
+			dragging.current = false;
+			container.current?.classList.remove("is-dragging");
+		};
 		window.addEventListener("mousemove", onMove);
 		window.addEventListener("mouseup", stop);
 		window.addEventListener("touchmove", onTouch, { passive: true });
@@ -1109,59 +1105,49 @@ function BeforeAfterSlider({ before, after, label, index = 0, inView = false }) 
 			window.removeEventListener("mouseup", stop);
 			window.removeEventListener("touchmove", onTouch);
 			window.removeEventListener("touchend", stop);
+			if (dragRaf.current) cancelAnimationFrame(dragRaf.current);
 		};
-	}, [setFromClientX]);
+	}, [queueDrag]);
 	(0, import_react.useEffect)(() => {
+		if (!shouldDemo) return;
 		const el = container.current;
 		if (!el) return;
 		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
 			setShowHint(false);
+			onDemoEnd?.();
 			return;
 		}
 		let cancelled = false;
-		const isCancelled = () => cancelled;
-		const runDemo = async () => {
-			await delay(index * 220, isCancelled);
-			if (isCancelled() || userTouched.current) return;
+		const onEnd = (e) => {
+			if (e.animationName !== "ba-auto-reveal") return;
+			el.classList.remove("ba-card--demo", "is-active");
+			setIsDemoing(false);
+			onDemoEnd?.();
+		};
+		const start = async () => {
+			await decodeCardImages(el);
+			if (cancelled || userTouched.current) {
+				onDemoEnd?.();
+				return;
+			}
 			el.classList.add("is-active");
+			el.classList.add("ba-card--demo");
 			setIsDemoing(true);
 			setShowHint(false);
-			for (let rep = 0; rep < 2; rep++) {
-				await animateValue(28, 72, 2200, easeInOut, applySplit, isCancelled);
-				if (isCancelled() || userTouched.current) return;
-				await animateValue(72, 28, 2200, easeInOut, applySplit, isCancelled);
-				if (isCancelled() || userTouched.current) return;
-			}
-			await animateValue(valueRef.current, 50, 550, easeOut, applySplit, isCancelled);
-			if (isCancelled() || userTouched.current) return;
-			el.classList.remove("is-active");
-			setIsDemoing(false);
 		};
-		const observer = new IntersectionObserver(([entry]) => {
-			if (entry.isIntersecting) {
-				runDemo();
-				observer.disconnect();
-			}
-		}, {
-			threshold: .12,
-			rootMargin: "0px 0px -12% 0px"
-		});
-		observer.observe(el);
+		el.addEventListener("animationend", onEnd);
+		start();
 		return () => {
 			cancelled = true;
-			observer.disconnect();
-			el.classList.remove("is-active");
+			el.removeEventListener("animationend", onEnd);
+			el.classList.remove("ba-card--demo", "is-active");
 		};
-	}, [index, applySplit]);
+	}, [shouldDemo, onDemoEnd]);
 	const beginDrag = (clientX) => {
 		stopDemo();
-		container.current?.classList.add("is-active");
+		container.current?.classList.add("is-dragging", "is-active");
 		dragging.current = true;
-		setFromClientX(clientX);
-	};
-	const endDrag = () => {
-		dragging.current = false;
-		if (!isDemoing) container.current?.classList.remove("is-active");
+		queueDrag(clientX);
 	};
 	const eager = index === 0;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -1170,14 +1156,13 @@ function BeforeAfterSlider({ before, after, label, index = 0, inView = false }) 
 		style: {
 			aspectRatio: "3 / 4",
 			cursor: "ew-resize",
-			transitionDelay: inView ? `${index * .12}s` : void 0
+			transitionDelay: inView ? `${index * .1}s` : void 0,
+			["--ba-index"]: index
 		},
 		onMouseDown: (e) => beginDrag(e.clientX),
-		onMouseUp: endDrag,
 		onTouchStart: (e) => {
 			if (e.touches[0]) beginDrag(e.touches[0].clientX);
 		},
-		onTouchEnd: endDrag,
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 				src: before,
@@ -1188,14 +1173,21 @@ function BeforeAfterSlider({ before, after, label, index = 0, inView = false }) 
 				decoding: "async",
 				draggable: false
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-				src: after,
-				alt: `${label} — after`,
-				className: "ba-after-layer absolute inset-0 h-full w-full object-cover",
-				loading: eager ? "eager" : "lazy",
-				fetchPriority: index <= 1 ? "high" : "auto",
-				decoding: "async",
-				draggable: false
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "ba-reveal absolute inset-0 overflow-hidden",
+				"aria-hidden": "true",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "ba-reveal-scaler h-full w-full",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+						src: after,
+						alt: `${label} — after`,
+						className: "ba-after-layer block h-full w-full object-cover",
+						loading: eager ? "eager" : "lazy",
+						fetchPriority: index <= 1 ? "high" : "auto",
+						decoding: "async",
+						draggable: false
+					})
+				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/35" }),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -1211,7 +1203,7 @@ function BeforeAfterSlider({ before, after, label, index = 0, inView = false }) 
 				children: label
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "ba-handle-track pointer-events-none absolute top-0 bottom-0 z-10 w-0.5 bg-gold",
+				className: "ba-handle-track pointer-events-none absolute top-0 bottom-0 z-10 w-0.5 -translate-x-1/2 bg-gold",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: `ba-handle absolute top-1/2 left-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-gold bg-bg-primary/90 text-gold ${isDemoing || showHint ? "ba-handle--pulse" : ""}`,
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -1239,12 +1231,14 @@ function BeforeAfterSlider({ before, after, label, index = 0, inView = false }) 
 function Transformations() {
 	const gridRef = (0, import_react.useRef)(null);
 	const [gridInView, setGridInView] = (0, import_react.useState)(false);
+	const [demoIndex, setDemoIndex] = (0, import_react.useState)(null);
 	(0, import_react.useEffect)(() => {
 		const el = gridRef.current;
 		if (!el) return;
 		const observer = new IntersectionObserver(([entry]) => {
 			if (entry.isIntersecting) {
 				setGridInView(true);
+				setDemoIndex(0);
 				observer.disconnect();
 			}
 		}, {
@@ -1253,6 +1247,13 @@ function Transformations() {
 		});
 		observer.observe(el);
 		return () => observer.disconnect();
+	}, []);
+	const handleDemoEnd = (0, import_react.useCallback)(() => {
+		setDemoIndex((current) => {
+			if (current === null || current < 0) return current;
+			const next = current + 1;
+			return next < TRANSFORMATIONS.length ? next : -1;
+		});
 	}, []);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 		className: "bg-bg-primary py-24 md:py-32",
@@ -1288,6 +1289,8 @@ function Transformations() {
 			children: TRANSFORMATIONS.map((t, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BeforeAfterSlider, {
 				index: i,
 				inView: gridInView,
+				shouldDemo: demoIndex === i,
+				onDemoEnd: handleDemoEnd,
 				...t
 			}, i))
 		})]

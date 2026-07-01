@@ -342,9 +342,9 @@ export const VALUES: ValueItem[] = [
 ];
 
 export const TRANSFORMATIONS: Transformation[] = [
-  { before: MEDIA.salonLounge, after: MEDIA.salonChandelier, label: "Colour & Cut" },
-  { before: MEDIA.salonNails, after: MEDIA.salonLounge2, label: "Bridal Glam" },
-  { before: MEDIA.salonExtra1, after: MEDIA.salonExtra2, label: "Keratin Smooth" },
+  { before: MEDIA.transformBefore1, after: MEDIA.transformAfter1, label: "Colour & Cut" },
+  { before: MEDIA.transformBefore2, after: MEDIA.transformAfter2, label: "Bridal Glam" },
+  { before: MEDIA.transformBefore3, after: MEDIA.transformAfter3, label: "Keratin Smooth" },
 ];
 
 export interface GalleryItem {

@@ -1,19 +1,19 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { n as gsapWithCSS, t as ScrollTrigger } from "../_libs/gsap.mjs";
-import { d as orvella_logo_png_default, n as MEDIA, r as NAV_LINKS, u as WHATSAPP_URL } from "./constants-CuQpxFf8.mjs";
+import { d as orvella_logo_png_default, n as MEDIA, r as NAV_LINKS, u as WHATSAPP_URL } from "./constants-DQnu0zFC.mjs";
 import { n as require_jsx_runtime, r as require_react, t as QueryClientProvider } from "../_libs/react+tanstack__react-query.mjs";
 import { N as useRouter, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, p as lazyRouteComponent, s as Scripts } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as cn, t as CtaButton } from "./CtaButton-B1cdr6-K.mjs";
 import { n as FaWhatsapp } from "../_libs/react-icons.mjs";
 import { l as Menu, n as Sun, s as Moon, t as X } from "../_libs/lucide-react.mjs";
-import { t as Footer } from "./Footer-B2SvbQZF.mjs";
+import { t as Footer } from "./Footer-C-_d8Z3J.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as Lenis } from "../_libs/lenis.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-B2v1Wec7.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Dj_iSwOd.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-BdjivKxh.css";
+var styles_default = "/assets/styles-BB4BXvZd.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -459,7 +459,7 @@ function RootComponent() {
 		] })
 	});
 }
-var $$splitComponentImporter$5 = () => import("./services-DejZMrEp.mjs");
+var $$splitComponentImporter$5 = () => import("./services-BGA_RJwE.mjs");
 var Route$5 = createFileRoute("/services")({
 	head: () => ({ meta: [
 		{ title: "Services — Orvella Salon" },
@@ -478,7 +478,7 @@ var Route$5 = createFileRoute("/services")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$5, "component")
 });
-var $$splitComponentImporter$4 = () => import("./gallery-Cb6_8WRf.mjs");
+var $$splitComponentImporter$4 = () => import("./gallery-BAlLDPu8.mjs");
 var Route$4 = createFileRoute("/gallery")({
 	head: () => ({ meta: [
 		{ title: "Gallery — Orvella Salon" },
@@ -497,7 +497,7 @@ var Route$4 = createFileRoute("/gallery")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$4, "component")
 });
-var $$splitComponentImporter$3 = () => import("./contact-kPEKw0Rn.mjs");
+var $$splitComponentImporter$3 = () => import("./contact-PSLSChPD.mjs");
 var Route$3 = createFileRoute("/contact")({
 	head: () => ({ meta: [
 		{ title: "Contact — Orvella Salon" },
@@ -516,7 +516,7 @@ var Route$3 = createFileRoute("/contact")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-var $$splitComponentImporter$2 = () => import("./bridal-SNl7RmZd.mjs");
+var $$splitComponentImporter$2 = () => import("./bridal-CSBLhf-G.mjs");
 var Route$2 = createFileRoute("/bridal")({
 	head: () => ({ meta: [
 		{ title: "Bridal Studio — Orvella Salon" },
@@ -535,7 +535,7 @@ var Route$2 = createFileRoute("/bridal")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./about-CAfBMv1O.mjs");
+var $$splitComponentImporter$1 = () => import("./about-0yxI3NqF.mjs");
 var Route$1 = createFileRoute("/about")({
 	head: () => ({ meta: [
 		{ title: "About — Orvella Salon" },
@@ -554,7 +554,7 @@ var Route$1 = createFileRoute("/about")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
-var $$splitComponentImporter = () => import("./routes-GvtejYiX.mjs");
+var $$splitComponentImporter = () => import("./routes-Ds5J9GK5.mjs");
 var Route = createFileRoute("/")({
 	head: () => ({ meta: [
 		{ title: "Orvella Salon — Luxury Hair, Skin & Beauty in Lajpat Nagar" },

@@ -1,49 +1,29 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { TRANSFORMATIONS } from "@/lib/constants";
 import type { Transformation } from "@/types";
 
-const easeInOut = (t: number) =>
-  t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-
-const easeOut = (t: number) => 1 - Math.pow(1 - t, 2);
-
-function animateValue(
-  from: number,
-  to: number,
-  durationMs: number,
-  ease: (t: number) => number,
-  onUpdate: (v: number) => void,
-  isCancelled: () => boolean,
-): Promise<void> {
-  return new Promise((resolve) => {
-    const start = performance.now();
-
-    const tick = (now: number) => {
-      if (isCancelled()) {
-        resolve();
-        return;
-      }
-      const t = Math.min(1, (now - start) / durationMs);
-      onUpdate(from + (to - from) * ease(t));
-      if (t < 1) requestAnimationFrame(tick);
-      else resolve();
-    };
-
-    requestAnimationFrame(tick);
-  });
+function freezeSplit(el: HTMLElement) {
+  const split = getComputedStyle(el).getPropertyValue("--split").trim() || "50";
+  el.style.setProperty("--split", split);
+  el.classList.remove("ba-card--demo");
 }
 
-function delay(ms: number, isCancelled: () => boolean): Promise<void> {
-  return new Promise((resolve) => {
-    const id = window.setTimeout(() => {
-      if (!isCancelled()) resolve();
-    }, ms);
-    if (isCancelled()) {
-      clearTimeout(id);
-      resolve();
-    }
-  });
+async function decodeCardImages(el: HTMLElement) {
+  const imgs = el.querySelectorAll<HTMLImageElement>("img");
+  await Promise.all(
+    [...imgs].map(
+      (img) =>
+        new Promise<void>((resolve) => {
+          if (img.complete) resolve();
+          else {
+            img.addEventListener("load", () => resolve(), { once: true });
+            img.addEventListener("error", () => resolve(), { once: true });
+          }
+        }),
+    ),
+  );
+  await Promise.all([...imgs].map((img) => img.decode?.().catch(() => undefined) ?? Promise.resolve()));
 }
 
 function BeforeAfterSlider({
@@ -52,36 +32,50 @@ function BeforeAfterSlider({
   label,
   index = 0,
   inView = false,
-}: Transformation & { index?: number; inView?: boolean }) {
+  shouldDemo = false,
+  onDemoEnd,
+}: Transformation & {
+  index?: number;
+  inView?: boolean;
+  shouldDemo?: boolean;
+  onDemoEnd?: () => void;
+}) {
   const container = useRef<HTMLDivElement>(null);
   const valueRef = useRef(50);
   const [showHint, setShowHint] = useState(true);
   const [isDemoing, setIsDemoing] = useState(false);
   const dragging = useRef(false);
   const userTouched = useRef(false);
+  const dragRaf = useRef(0);
+  const pendingX = useRef(0);
 
   const applySplit = useCallback((pct: number) => {
     const clamped = Math.max(0, Math.min(100, pct));
     valueRef.current = clamped;
-    const el = container.current;
-    if (!el) return;
-    el.style.setProperty("--split", String(clamped));
+    container.current?.style.setProperty("--split", String(clamped));
   }, []);
 
-  const setFromClientX = useCallback(
+  const flushDrag = useCallback(() => {
+    dragRaf.current = 0;
+    const el = container.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    applySplit(((pendingX.current - rect.left) / rect.width) * 100);
+  }, [applySplit]);
+
+  const queueDrag = useCallback(
     (clientX: number) => {
-      const el = container.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      applySplit(((clientX - rect.left) / rect.width) * 100);
+      pendingX.current = clientX;
+      if (!dragRaf.current) dragRaf.current = requestAnimationFrame(flushDrag);
     },
-    [applySplit],
+    [flushDrag],
   );
 
   const stopDemo = useCallback(() => {
     if (userTouched.current) return;
     userTouched.current = true;
-    container.current?.classList.remove("is-active");
+    const el = container.current;
+    if (el) freezeSplit(el);
     setIsDemoing(false);
     setShowHint(false);
   }, []);
@@ -91,10 +85,13 @@ function BeforeAfterSlider({
   }, [applySplit]);
 
   useEffect(() => {
-    const onMove = (e: MouseEvent) => dragging.current && setFromClientX(e.clientX);
+    const onMove = (e: MouseEvent) => dragging.current && queueDrag(e.clientX);
     const onTouch = (e: TouchEvent) =>
-      dragging.current && e.touches[0] && setFromClientX(e.touches[0].clientX);
-    const stop = () => (dragging.current = false);
+      dragging.current && e.touches[0] && queueDrag(e.touches[0].clientX);
+    const stop = () => {
+      dragging.current = false;
+      container.current?.classList.remove("is-dragging");
+    };
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup", stop);
     window.addEventListener("touchmove", onTouch, { passive: true });
@@ -104,72 +101,59 @@ function BeforeAfterSlider({
       window.removeEventListener("mouseup", stop);
       window.removeEventListener("touchmove", onTouch);
       window.removeEventListener("touchend", stop);
+      if (dragRaf.current) cancelAnimationFrame(dragRaf.current);
     };
-  }, [setFromClientX]);
+  }, [queueDrag]);
 
   useEffect(() => {
+    if (!shouldDemo) return;
     const el = container.current;
     if (!el) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reducedMotion) {
       setShowHint(false);
+      onDemoEnd?.();
       return;
     }
 
     let cancelled = false;
-    const isCancelled = () => cancelled || userTouched.current;
 
-    const runDemo = async () => {
-      await delay(index * 220, isCancelled);
-      if (isCancelled() || userTouched.current) return;
-
-      el.classList.add("is-active");
-      setIsDemoing(true);
-      setShowHint(false);
-
-      for (let rep = 0; rep < 2; rep++) {
-        await animateValue(28, 72, 2200, easeInOut, applySplit, isCancelled);
-        if (isCancelled() || userTouched.current) return;
-        await animateValue(72, 28, 2200, easeInOut, applySplit, isCancelled);
-        if (isCancelled() || userTouched.current) return;
-      }
-
-      await animateValue(valueRef.current, 50, 550, easeOut, applySplit, isCancelled);
-      if (isCancelled() || userTouched.current) return;
-
-      el.classList.remove("is-active");
+    const onEnd = (e: AnimationEvent) => {
+      if (e.animationName !== "ba-auto-reveal") return;
+      el.classList.remove("ba-card--demo", "is-active");
       setIsDemoing(false);
+      onDemoEnd?.();
     };
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          void runDemo();
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -12% 0px" },
-    );
-    observer.observe(el);
+    const start = async () => {
+      await decodeCardImages(el);
+      if (cancelled || userTouched.current) {
+        onDemoEnd?.();
+        return;
+      }
+
+      el.classList.add("is-active");
+      el.classList.add("ba-card--demo");
+      setIsDemoing(true);
+      setShowHint(false);
+    };
+
+    el.addEventListener("animationend", onEnd);
+    void start();
 
     return () => {
       cancelled = true;
-      observer.disconnect();
-      el.classList.remove("is-active");
+      el.removeEventListener("animationend", onEnd);
+      el.classList.remove("ba-card--demo", "is-active");
     };
-  }, [index, applySplit]);
+  }, [shouldDemo, onDemoEnd]);
 
   const beginDrag = (clientX: number) => {
     stopDemo();
-    container.current?.classList.add("is-active");
+    container.current?.classList.add("is-dragging", "is-active");
     dragging.current = true;
-    setFromClientX(clientX);
-  };
-
-  const endDrag = () => {
-    dragging.current = false;
-    if (!isDemoing) container.current?.classList.remove("is-active");
+    queueDrag(clientX);
   };
 
   const eager = index === 0;
@@ -181,14 +165,13 @@ function BeforeAfterSlider({
       style={{
         aspectRatio: "3 / 4",
         cursor: "ew-resize",
-        transitionDelay: inView ? `${index * 0.12}s` : undefined,
+        transitionDelay: inView ? `${index * 0.1}s` : undefined,
+        ["--ba-index" as string]: index,
       }}
       onMouseDown={(e) => beginDrag(e.clientX)}
-      onMouseUp={endDrag}
       onTouchStart={(e) => {
         if (e.touches[0]) beginDrag(e.touches[0].clientX);
       }}
-      onTouchEnd={endDrag}
     >
       <img
         src={before}
@@ -199,15 +182,20 @@ function BeforeAfterSlider({
         decoding="async"
         draggable={false}
       />
-      <img
-        src={after}
-        alt={`${label} — after`}
-        className="ba-after-layer absolute inset-0 h-full w-full object-cover"
-        loading={eager ? "eager" : "lazy"}
-        fetchPriority={index <= 1 ? "high" : "auto"}
-        decoding="async"
-        draggable={false}
-      />
+
+      <div className="ba-reveal absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div className="ba-reveal-scaler h-full w-full">
+          <img
+            src={after}
+            alt={`${label} — after`}
+            className="ba-after-layer block h-full w-full object-cover"
+            loading={eager ? "eager" : "lazy"}
+            fetchPriority={index <= 1 ? "high" : "auto"}
+            decoding="async"
+            draggable={false}
+          />
+        </div>
+      </div>
 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/35" />
 
@@ -218,7 +206,7 @@ function BeforeAfterSlider({
         {label}
       </span>
 
-      <div className="ba-handle-track pointer-events-none absolute top-0 bottom-0 z-10 w-0.5 bg-gold">
+      <div className="ba-handle-track pointer-events-none absolute top-0 bottom-0 z-10 w-0.5 -translate-x-1/2 bg-gold">
         <div
           className={`ba-handle absolute top-1/2 left-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-gold bg-bg-primary/90 text-gold ${isDemoing || showHint ? "ba-handle--pulse" : ""}`}
         >
@@ -243,6 +231,7 @@ function BeforeAfterSlider({
 export function Transformations() {
   const gridRef = useRef<HTMLDivElement>(null);
   const [gridInView, setGridInView] = useState(false);
+  const [demoIndex, setDemoIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const el = gridRef.current;
@@ -252,6 +241,7 @@ export function Transformations() {
       ([entry]) => {
         if (entry.isIntersecting) {
           setGridInView(true);
+          setDemoIndex(0);
           observer.disconnect();
         }
       },
@@ -259,6 +249,14 @@ export function Transformations() {
     );
     observer.observe(el);
     return () => observer.disconnect();
+  }, []);
+
+  const handleDemoEnd = useCallback(() => {
+    setDemoIndex((current) => {
+      if (current === null || current < 0) return current;
+      const next = current + 1;
+      return next < TRANSFORMATIONS.length ? next : -1;
+    });
   }, []);
 
   return (
@@ -285,7 +283,14 @@ export function Transformations() {
         className="ba-grid mx-auto mt-14 grid max-w-[1500px] grid-cols-1 gap-6 px-6 md:mt-16 md:grid-cols-3 md:px-12"
       >
         {TRANSFORMATIONS.map((t, i) => (
-          <BeforeAfterSlider key={i} index={i} inView={gridInView} {...t} />
+          <BeforeAfterSlider
+            key={i}
+            index={i}
+            inView={gridInView}
+            shouldDemo={demoIndex === i}
+            onDemoEnd={handleDemoEnd}
+            {...t}
+          />
         ))}
       </div>
     </section>

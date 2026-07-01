@@ -1,5 +1,5 @@
 import { n as gsapWithCSS, t as ScrollTrigger } from "../_libs/gsap.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/constants-CuQpxFf8.js
+//#region node_modules/.nitro/vite/services/ssr/assets/constants-DQnu0zFC.js
 var orvella_logo_png_default = "/assets/orvella%20logo%20png-B3iRp3tm.png";
 if (typeof window !== "undefined") gsapWithCSS.registerPlugin(ScrollTrigger, ScrollToPlugin);
 var MOV_4315_default = "/assets/MOV_4315-B4gukgq5.MOV";
@@ -8,12 +8,18 @@ var logo_orvellasalon_default = "/assets/logo_orvellasalon-CbjuZCoH.PNG";
 var gemini_generated_video_a775eae6_default = "/assets/gemini_generated_video_a775eae6-BTkVouvr.mp4";
 var WhatsApp_Video_2026_06_29_at_11_33_31_AM__1__default = "/assets/WhatsApp%20Video%202026-06-29%20at%2011.33.31%20AM%20(1)-Bt1jJh7b.mp4";
 var WhatsApp_Video_2026_06_29_at_11_33_31_AM_default = "/assets/WhatsApp%20Video%202026-06-29%20at%2011.33.31%20AM-CvwWnuxq.mp4";
-var _7_default = "/assets/7-C7lLOWO8.png";
-var _8_default = "/assets/8-BCvfn1oM.png";
-var _9_default = "/assets/9-CakIYhDR.png";
-var _10_default = "/assets/10-BlfVTUFj.png";
-var _11_default = "/assets/11-CJ0bcwrb.png";
-var _12_default = "/assets/12-Bg7rZk8I.png";
+var _7_default$1 = "/assets/7-C7lLOWO8.png";
+var _8_default$1 = "/assets/8-BCvfn1oM.png";
+var _9_default$1 = "/assets/9-CakIYhDR.png";
+var _10_default$1 = "/assets/10-BlfVTUFj.png";
+var _11_default$1 = "/assets/11-CJ0bcwrb.png";
+var _12_default$1 = "/assets/12-Bg7rZk8I.png";
+var _7_default = "/assets/7-D1jZYY7s.webp";
+var _8_default = "/assets/8-CwwM29nL.webp";
+var _9_default = "/assets/9-C_yjXF7z.webp";
+var _10_default = "/assets/10-lWvcSieK.webp";
+var _11_default = "/assets/11-Ddl79KwH.webp";
+var _12_default = "/assets/12-DDWpJWEP.webp";
 var High_end_website_hero_banner_in_202606301543_default = "/assets/High-end_website_hero_banner_in_202606301543-lxGdrNsR.jpeg";
 var High_end_website_hero_banner_in_202606301543__3__default = "/assets/High-end_website_hero_banner_in_202606301543%20(3)-DRRsXLJi.jpeg";
 var A_modern__asymmetric_collage_banner_202606301545_default = "/assets/A_modern__asymmetric_collage_banner_202606301545-WlrBGjZs.jpeg";
@@ -24,12 +30,12 @@ var MEDIA = {
 	heroVideo: gemini_generated_video_a775eae6_default,
 	ambientReel: WhatsApp_Video_2026_06_29_at_11_33_31_AM__1__default,
 	bridalReel: WhatsApp_Video_2026_06_29_at_11_33_31_AM_default,
-	salonLounge: _7_default,
-	salonChandelier: _8_default,
-	salonNails: _9_default,
-	salonLounge2: _10_default,
-	salonExtra1: _11_default,
-	salonExtra2: _12_default,
+	salonLounge: _7_default$1,
+	salonChandelier: _8_default$1,
+	salonNails: _9_default$1,
+	salonLounge2: _10_default$1,
+	salonExtra1: _11_default$1,
+	salonExtra2: _12_default$1,
 	bannerAbout: High_end_website_hero_banner_in_202606301543_default,
 	bannerBridal: High_end_website_hero_banner_in_202606301543__3__default,
 	bannerServices: A_modern__asymmetric_collage_banner_202606301545_default,
@@ -38,12 +44,19 @@ var MEDIA = {
 	hairReelSecondary: MOV_4303_default,
 	/** Salon showcase — swap imports when clean caption-free assets arrive */
 	salonReception: High_end_website_hero_banner_in_202606301543_default,
-	salonRelaxationLounge: _10_default,
-	salonMinimalLuxury: _7_default,
+	salonRelaxationLounge: _10_default$1,
+	salonMinimalLuxury: _7_default$1,
 	salonHairProducts: A_modern__asymmetric_collage_banner_202606301545_default,
-	salonNailStudio: _9_default,
+	salonNailStudio: _9_default$1,
 	salonReel1: WhatsApp_Video_2026_06_29_at_11_33_31_AM__1__default,
-	salonReel2: WhatsApp_Video_2026_06_29_at_11_33_31_AM_default
+	salonReel2: WhatsApp_Video_2026_06_29_at_11_33_31_AM_default,
+	/** Lightweight WebP — before/after sliders only (~90KB vs ~17MB PNG) */
+	transformBefore1: _7_default,
+	transformAfter1: _8_default,
+	transformBefore2: _9_default,
+	transformAfter2: _10_default,
+	transformBefore3: _11_default,
+	transformAfter3: _12_default
 };
 /** Full-width hero banners for inner pages (not homepage) */
 var PAGE_BANNERS = {
@@ -306,18 +319,18 @@ MEDIA.salonLounge, MEDIA.salonChandelier, MEDIA.salonNails, MEDIA.salonLounge2, 
 MEDIA.salonExtra1, MEDIA.salonExtra2, MEDIA.salonNails, MEDIA.salonLounge, MEDIA.salonChandelier, MEDIA.salonLounge2;
 var TRANSFORMATIONS = [
 	{
-		before: MEDIA.salonLounge,
-		after: MEDIA.salonChandelier,
+		before: MEDIA.transformBefore1,
+		after: MEDIA.transformAfter1,
 		label: "Colour & Cut"
 	},
 	{
-		before: MEDIA.salonNails,
-		after: MEDIA.salonLounge2,
+		before: MEDIA.transformBefore2,
+		after: MEDIA.transformAfter2,
 		label: "Bridal Glam"
 	},
 	{
-		before: MEDIA.salonExtra1,
-		after: MEDIA.salonExtra2,
+		before: MEDIA.transformBefore3,
+		after: MEDIA.transformAfter3,
 		label: "Keratin Smooth"
 	}
 ];

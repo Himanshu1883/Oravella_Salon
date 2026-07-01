@@ -1,10 +1,10 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { n as gsapWithCSS } from "../_libs/gsap.mjs";
-import { n as MEDIA } from "./constants-CuQpxFf8.mjs";
+import { n as MEDIA } from "./constants-DQnu0zFC.mjs";
 import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { t as SectionEyebrow } from "./SectionEyebrow-DcGyr-l9.mjs";
-import { t as Footer } from "./Footer-B2SvbQZF.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/gallery-Cb6_8WRf.js
+import { t as Footer } from "./Footer-C-_d8Z3J.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/gallery-BAlLDPu8.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var IMAGES = [

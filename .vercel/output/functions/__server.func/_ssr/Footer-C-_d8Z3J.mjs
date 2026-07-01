@@ -1,9 +1,9 @@
-import { n as MEDIA, o as SITE, r as NAV_LINKS, s as SOCIAL_LINKS } from "./constants-CuQpxFf8.mjs";
+import { n as MEDIA, o as SITE, r as NAV_LINKS, s as SOCIAL_LINKS } from "./constants-DQnu0zFC.mjs";
 import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as FaWhatsapp, t as FaInstagram } from "../_libs/react-icons.mjs";
 import { d as Mail, o as Phone, u as MapPin } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/Footer-B2SvbQZF.js
+//#region node_modules/.nitro/vite/services/ssr/assets/Footer-C-_d8Z3J.js
 var import_jsx_runtime = require_jsx_runtime();
 var FOOTER_HOURS = "Mon – Sun — 10:00 AM – 9:00 PM";
 function Footer() {

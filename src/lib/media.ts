@@ -11,6 +11,12 @@ import salonNails from "@/assets/9.png";
 import salonLounge2 from "@/assets/10.png";
 import salonExtra1 from "@/assets/11.png";
 import salonExtra2 from "@/assets/12.png";
+import transform7 from "@/assets/transform/7.webp";
+import transform8 from "@/assets/transform/8.webp";
+import transform9 from "@/assets/transform/9.webp";
+import transform10 from "@/assets/transform/10.webp";
+import transform11 from "@/assets/transform/11.webp";
+import transform12 from "@/assets/transform/12.webp";
 import bannerAbout from "@/assets/High-end_website_hero_banner_in_202606301543.jpeg";
 import bannerBridal from "@/assets/High-end_website_hero_banner_in_202606301543 (3).jpeg";
 import bannerServices from "@/assets/A_modern,_asymmetric_collage_banner_202606301545.jpeg";
@@ -42,6 +48,13 @@ export const MEDIA = {
   salonNailStudio: salonNails,
   salonReel1: ambientReel,
   salonReel2: bridalReel,
+  /** Lightweight WebP — before/after sliders only (~90KB vs ~17MB PNG) */
+  transformBefore1: transform7,
+  transformAfter1: transform8,
+  transformBefore2: transform9,
+  transformAfter2: transform10,
+  transformBefore3: transform11,
+  transformAfter3: transform12,
 } as const;
 
 /** Full-width hero banners for inner pages (not homepage) */
