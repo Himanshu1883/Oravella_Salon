@@ -22,7 +22,7 @@ import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { PageTransition } from "@/components/layout/PageTransition";
 
-function NotFoundComponent() {D
+function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-bg-primary px-4 pt-24">
       <div className="max-w-md text-center">
