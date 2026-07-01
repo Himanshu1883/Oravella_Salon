@@ -48,13 +48,7 @@ export function QuoteBreak({ children }: { children?: ReactNode }) {
       if (!zoneEl || !trackEl) return;
 
       if (reduce) {
-        gsap.set(".q-word, .quote-eyebrow, .quote-rule, .quote-support, .quote-attribution, .quote-mark", {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          scaleX: 1,
-        });
-        gsap.set(copy.current, { opacity: 1, yPercent: 0 });
+        gsap.set(copy.current, { yPercent: 0 });
         return;
       }
 
@@ -70,113 +64,11 @@ export function QuoteBreak({ children }: { children?: ReactNode }) {
         })
         .fromTo(
           copy.current,
-          { yPercent: 48, opacity: 0 },
-          { yPercent: 0, opacity: 1, ease: "power2.out", duration: 0.35 },
+          { yPercent: 32 },
+          { yPercent: 0, ease: "power2.out", duration: 0.25 },
         )
-        .to(copy.current, { yPercent: 0, opacity: 1, duration: 0.3 })
-        .to(copy.current, { yPercent: -48, opacity: 0, ease: "power2.in", duration: 0.35 });
-
-      const words = zoneEl.querySelectorAll<HTMLSpanElement>(".q-word");
-      gsap.fromTo(
-        words,
-        { opacity: 0.08 },
-        {
-          opacity: 1,
-          stagger: 0.08,
-          ease: "none",
-          scrollTrigger: {
-            trigger: trackEl,
-            start: "top 68%",
-            end: "bottom 42%",
-            scrub: 0.6,
-            invalidateOnRefresh: true,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        ".quote-eyebrow",
-        { opacity: 0, y: 24 },
-        {
-          opacity: 1,
-          y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: trackEl,
-            start: "top 76%",
-            end: "top 48%",
-            scrub: 0.5,
-            invalidateOnRefresh: true,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        ".quote-rule",
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: trackEl,
-            start: "top 70%",
-            end: "top 44%",
-            scrub: 0.5,
-            invalidateOnRefresh: true,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        ".quote-support",
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: trackEl,
-            start: "top 56%",
-            end: "bottom 38%",
-            scrub: 0.55,
-            invalidateOnRefresh: true,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        ".quote-attribution",
-        { opacity: 0, y: 16 },
-        {
-          opacity: 1,
-          y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: trackEl,
-            start: "top 48%",
-            end: "bottom 30%",
-            scrub: 0.5,
-            invalidateOnRefresh: true,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        ".quote-mark",
-        { opacity: 0, scale: 0.92 },
-        {
-          opacity: 1,
-          scale: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: trackEl,
-            start: "top 72%",
-            end: "top 50%",
-            scrub: 0.45,
-            invalidateOnRefresh: true,
-          },
-        },
-      );
+        .to(copy.current, { yPercent: 0, duration: 0.5 })
+        .to(copy.current, { yPercent: -32, ease: "power2.in", duration: 0.25 });
     }, zone);
 
     const refresh = () => ScrollTrigger.refresh();

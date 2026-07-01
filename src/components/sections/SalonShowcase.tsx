@@ -226,7 +226,7 @@ function BeyondHairStickyBand({ children }: { children: React.ReactNode }) {
       if (!trackEl) return;
 
       if (reduce) {
-        gsap.set(copy.current, { opacity: 1, yPercent: 0 });
+        gsap.set(copy.current, { yPercent: 0 });
         return;
       }
 
@@ -242,11 +242,11 @@ function BeyondHairStickyBand({ children }: { children: React.ReactNode }) {
         })
         .fromTo(
           copy.current,
-          { yPercent: 42, opacity: 0 },
-          { yPercent: 0, opacity: 1, ease: "power2.out", duration: 0.35 },
+          { yPercent: 32 },
+          { yPercent: 0, ease: "power2.out", duration: 0.25 },
         )
-        .to(copy.current, { yPercent: 0, opacity: 1, duration: 0.32 })
-        .to(copy.current, { yPercent: -42, opacity: 0, ease: "power2.in", duration: 0.33 });
+        .to(copy.current, { yPercent: 0, duration: 0.5 })
+        .to(copy.current, { yPercent: -32, ease: "power2.in", duration: 0.25 });
     }, zone);
 
     const refresh = () => ScrollTrigger.refresh();
