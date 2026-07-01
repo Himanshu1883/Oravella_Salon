@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap } from "@/lib/gsap";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { TRANSFORMATIONS } from "@/lib/constants";
 import type { Transformation } from "@/types";
@@ -91,15 +91,19 @@ function BeforeAfterSlider({
 
     demoTween.current = tween;
 
-    const trigger = ScrollTrigger.create({
-      trigger: el,
-      start: "top 88%",
-      once: true,
-      onEnter: () => tween.play(),
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          tween.play();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -12% 0px" },
+    );
+    observer.observe(el);
 
     return () => {
-      trigger.kill();
+      observer.disconnect();
       tween.kill();
     };
   }, [index]);

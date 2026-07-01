@@ -46,14 +46,14 @@ export function HeroSection() {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(90deg, rgba(6,6,6,0.92) 0%, rgba(6,6,6,0.78) 38%, rgba(6,6,6,0.35) 58%, rgba(6,6,6,0.12) 72%, rgba(6,6,6,0.4) 100%)",
+            "linear-gradient(90deg, rgba(6,6,6,0.72) 0%, rgba(6,6,6,0.55) 38%, rgba(6,6,6,0.22) 58%, rgba(6,6,6,0.06) 72%, rgba(6,6,6,0.22) 100%)",
         }}
       />
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(6,6,6,0.35) 0%, transparent 40%, rgba(6,6,6,0.55) 100%)",
+            "linear-gradient(180deg, rgba(6,6,6,0.22) 0%, transparent 40%, rgba(6,6,6,0.38) 100%)",
         }}
       />
 

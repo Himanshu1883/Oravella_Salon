@@ -2,7 +2,7 @@ import hairReelPrimary from "@/assets/MOV_4315.MOV";
 import hairReelSecondary from "@/assets/MOV_4303.MOV";
 import logo from "@/assets/orvella logo png.png";
 import logoMark from "@/assets/logo_orvellasalon.PNG";
-import heroVideo from "@/assets/hero-banner.mp4";
+import heroVideo from "@/assets/gemini_generated_video_a775eae6.mp4";
 import ambientReel from "@/assets/WhatsApp Video 2026-06-29 at 11.33.31 AM (1).mp4";
 import bridalReel from "@/assets/WhatsApp Video 2026-06-29 at 11.33.31 AM.mp4";
 import salonLounge from "@/assets/7.png";
