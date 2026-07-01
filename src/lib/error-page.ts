@@ -1,4 +1,25 @@
-export function renderErrorPage(): string {
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function formatErrorDetail(error: unknown): string | undefined {
+  if (!error) return undefined;
+  if (error instanceof Error) {
+    return error.stack ?? error.message;
+  }
+  return String(error);
+}
+
+export function renderErrorPage(error?: unknown): string {
+  const detail = formatErrorDetail(error);
+  const detailBlock = detail
+    ? `<pre class="detail">${escapeHtml(detail)}</pre>`
+    : "";
+
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -14,12 +35,14 @@ export function renderErrorPage(): string {
       a, button { padding: 0.5rem 1rem; border-radius: 0.375rem; font: inherit; cursor: pointer; text-decoration: none; border: 1px solid transparent; }
       .primary { background: #111; color: #fff; }
       .secondary { background: #fff; color: #111; border-color: #d1d5db; }
+      .detail { margin-top: 1rem; max-height: 12rem; overflow: auto; text-align: left; font: 12px/1.4 ui-monospace, monospace; color: #6b7280; white-space: pre-wrap; word-break: break-word; }
     </style>
   </head>
   <body>
     <div class="card">
       <h1>This page didn't load</h1>
       <p>Something went wrong on our end. You can try refreshing or head back home.</p>
+      ${detailBlock}
       <div class="actions">
         <button class="primary" onclick="location.reload()">Try again</button>
         <a class="secondary" href="/">Go home</a>

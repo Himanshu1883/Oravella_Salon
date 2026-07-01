@@ -14,6 +14,13 @@ export default defineConfig({
   },
   nitro: {
     preset: "vercel",
+    vercel: {
+      entryFormat: "node",
+      functions: {
+        // Pin LTS runtime — Nitro otherwise picks nodejs24.x from the local Node version.
+        runtime: "nodejs20.x",
+      },
+    },
   },
   vite: {
     build: {
