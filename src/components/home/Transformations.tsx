@@ -1,31 +1,71 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { TRANSFORMATIONS } from "@/lib/constants";
 import type { Transformation } from "@/types";
+
+const easeInOut = (t: number) =>
+  t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+const easeOut = (t: number) => 1 - Math.pow(1 - t, 2);
+
+function animateValue(
+  from: number,
+  to: number,
+  durationMs: number,
+  ease: (t: number) => number,
+  onUpdate: (v: number) => void,
+  isCancelled: () => boolean,
+): Promise<void> {
+  return new Promise((resolve) => {
+    const start = performance.now();
+
+    const tick = (now: number) => {
+      if (isCancelled()) {
+        resolve();
+        return;
+      }
+      const t = Math.min(1, (now - start) / durationMs);
+      onUpdate(from + (to - from) * ease(t));
+      if (t < 1) requestAnimationFrame(tick);
+      else resolve();
+    };
+
+    requestAnimationFrame(tick);
+  });
+}
+
+function delay(ms: number, isCancelled: () => boolean): Promise<void> {
+  return new Promise((resolve) => {
+    const id = window.setTimeout(() => {
+      if (!isCancelled()) resolve();
+    }, ms);
+    if (isCancelled()) {
+      clearTimeout(id);
+      resolve();
+    }
+  });
+}
 
 function BeforeAfterSlider({
   before,
   after,
   label,
   index = 0,
-}: Transformation & { index?: number }) {
+  inView = false,
+}: Transformation & { index?: number; inView?: boolean }) {
   const container = useRef<HTMLDivElement>(null);
-  const afterRef = useRef<HTMLImageElement>(null);
-  const handleRef = useRef<HTMLDivElement>(null);
   const valueRef = useRef(50);
   const [showHint, setShowHint] = useState(true);
   const [isDemoing, setIsDemoing] = useState(false);
   const dragging = useRef(false);
   const userTouched = useRef(false);
-  const demoTween = useRef<gsap.core.Tween | null>(null);
 
   const applySplit = useCallback((pct: number) => {
     const clamped = Math.max(0, Math.min(100, pct));
     valueRef.current = clamped;
-    const clip = `inset(0 ${100 - clamped}% 0 0)`;
-    if (afterRef.current) afterRef.current.style.clipPath = clip;
-    if (handleRef.current) handleRef.current.style.left = `${clamped}%`;
+    const el = container.current;
+    if (!el) return;
+    el.style.setProperty("--split", String(clamped));
   }, []);
 
   const setFromClientX = useCallback(
@@ -41,7 +81,7 @@ function BeforeAfterSlider({
   const stopDemo = useCallback(() => {
     if (userTouched.current) return;
     userTouched.current = true;
-    demoTween.current?.kill();
+    container.current?.classList.remove("is-active");
     setIsDemoing(false);
     setShowHint(false);
   }, []);
@@ -77,40 +117,35 @@ function BeforeAfterSlider({
       return;
     }
 
-    const obj = { v: 28 };
-    const tween = gsap.to(obj, {
-      v: 72,
-      duration: 2.2,
-      repeat: 2,
-      yoyo: true,
-      ease: "power1.inOut",
-      delay: index * 0.22,
-      paused: true,
-      onStart: () => {
-        setIsDemoing(true);
-        setShowHint(false);
-      },
-      onUpdate: () => {
-        if (!userTouched.current) applySplit(obj.v);
-      },
-      onComplete: () => {
-        if (userTouched.current) return;
-        gsap.to(obj, {
-          v: 50,
-          duration: 0.55,
-          ease: "power2.out",
-          onUpdate: () => applySplit(obj.v),
-          onComplete: () => setIsDemoing(false),
-        });
-      },
-    });
+    let cancelled = false;
+    const isCancelled = () => cancelled || userTouched.current;
 
-    demoTween.current = tween;
+    const runDemo = async () => {
+      await delay(index * 220, isCancelled);
+      if (isCancelled() || userTouched.current) return;
+
+      el.classList.add("is-active");
+      setIsDemoing(true);
+      setShowHint(false);
+
+      for (let rep = 0; rep < 2; rep++) {
+        await animateValue(28, 72, 2200, easeInOut, applySplit, isCancelled);
+        if (isCancelled() || userTouched.current) return;
+        await animateValue(72, 28, 2200, easeInOut, applySplit, isCancelled);
+        if (isCancelled() || userTouched.current) return;
+      }
+
+      await animateValue(valueRef.current, 50, 550, easeOut, applySplit, isCancelled);
+      if (isCancelled() || userTouched.current) return;
+
+      el.classList.remove("is-active");
+      setIsDemoing(false);
+    };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          tween.play();
+          void runDemo();
           observer.disconnect();
         }
       },
@@ -119,41 +154,57 @@ function BeforeAfterSlider({
     observer.observe(el);
 
     return () => {
+      cancelled = true;
       observer.disconnect();
-      tween.kill();
+      el.classList.remove("is-active");
     };
   }, [index, applySplit]);
 
   const beginDrag = (clientX: number) => {
     stopDemo();
+    container.current?.classList.add("is-active");
     dragging.current = true;
     setFromClientX(clientX);
   };
 
+  const endDrag = () => {
+    dragging.current = false;
+    if (!isDemoing) container.current?.classList.remove("is-active");
+  };
+
+  const eager = index === 0;
+
   return (
     <div
       ref={container}
-      className="ba-card group relative select-none overflow-hidden rounded-sm"
-      style={{ aspectRatio: "3 / 4", cursor: "ew-resize" }}
+      className={`ba-card group relative select-none overflow-hidden rounded-sm${inView ? " ba-card--in-view" : ""}`}
+      style={{
+        aspectRatio: "3 / 4",
+        cursor: "ew-resize",
+        transitionDelay: inView ? `${index * 0.12}s` : undefined,
+      }}
       onMouseDown={(e) => beginDrag(e.clientX)}
+      onMouseUp={endDrag}
       onTouchStart={(e) => {
         if (e.touches[0]) beginDrag(e.touches[0].clientX);
       }}
+      onTouchEnd={endDrag}
     >
       <img
         src={before}
         alt={`${label} — before`}
         className="absolute inset-0 h-full w-full object-cover"
-        loading="lazy"
+        loading={eager ? "eager" : "lazy"}
+        fetchPriority={eager ? "high" : "auto"}
         decoding="async"
         draggable={false}
       />
       <img
-        ref={afterRef}
         src={after}
         alt={`${label} — after`}
         className="ba-after-layer absolute inset-0 h-full w-full object-cover"
-        loading="lazy"
+        loading={eager ? "eager" : "lazy"}
+        fetchPriority={index <= 1 ? "high" : "auto"}
         decoding="async"
         draggable={false}
       />
@@ -167,11 +218,7 @@ function BeforeAfterSlider({
         {label}
       </span>
 
-      <div
-        ref={handleRef}
-        className="pointer-events-none absolute top-0 bottom-0 z-10 w-0.5 bg-gold"
-        style={{ left: "50%" }}
-      >
+      <div className="ba-handle-track pointer-events-none absolute top-0 bottom-0 z-10 w-0.5 bg-gold">
         <div
           className={`ba-handle absolute top-1/2 left-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-gold bg-bg-primary/90 text-gold ${isDemoing || showHint ? "ba-handle--pulse" : ""}`}
         >
@@ -194,43 +241,28 @@ function BeforeAfterSlider({
 }
 
 export function Transformations() {
-  const root = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [gridInView, setGridInView] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    const el = gridRef.current;
+    if (!el) return;
 
-    const ctx = gsap.context(() => {
-      gsap.set(".ba-card", { y: 60, opacity: 0 });
-      gsap.to(".ba-card", {
-        y: 0,
-        opacity: 1,
-        duration: 0.9,
-        ease: "power3.out",
-        stagger: 0.15,
-        scrollTrigger: {
-          trigger: ".ba-grid",
-          start: "top 80%",
-          toggleActions: "play none none none",
-        },
-      });
-    }, root);
-
-    const imgs = root.current?.querySelectorAll<HTMLImageElement>(".ba-card img") ?? [];
-    let pending = imgs.length;
-    const refreshIfReady = () => {
-      pending -= 1;
-      if (pending <= 0) ScrollTrigger.refresh();
-    };
-    imgs.forEach((img) => {
-      if (img.complete) refreshIfReady();
-      else img.addEventListener("load", refreshIfReady, { once: true });
-    });
-
-    return () => ctx.revert();
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setGridInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -8% 0px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <section ref={root} className="bg-bg-primary py-24 md:py-32">
+    <section className="bg-bg-primary py-24 md:py-32">
       <div className="mx-auto max-w-[1500px] px-6 text-center md:px-12">
         <div className="inline-flex flex-col items-center">
           <SectionEyebrow>Before &amp; After</SectionEyebrow>
@@ -248,9 +280,12 @@ export function Transformations() {
         </p>
       </div>
 
-      <div className="ba-grid mx-auto mt-14 grid max-w-[1500px] grid-cols-1 gap-6 px-6 md:mt-16 md:grid-cols-3 md:px-12">
+      <div
+        ref={gridRef}
+        className="ba-grid mx-auto mt-14 grid max-w-[1500px] grid-cols-1 gap-6 px-6 md:mt-16 md:grid-cols-3 md:px-12"
+      >
         {TRANSFORMATIONS.map((t, i) => (
-          <BeforeAfterSlider key={i} index={i} {...t} />
+          <BeforeAfterSlider key={i} index={i} inView={gridInView} {...t} />
         ))}
       </div>
     </section>

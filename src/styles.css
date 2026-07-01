@@ -451,11 +451,36 @@ body::after {
 
 /* Before / after transformation sliders */
 .ba-card {
+  --split: 50;
   contain: layout paint;
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ba-card--in-view {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .ba-after-layer {
+  clip-path: inset(0 calc(100% - var(--split) * 1%) 0 0);
+}
+
+.ba-card.is-active .ba-after-layer {
   will-change: clip-path;
+}
+
+.ba-handle-track {
+  left: calc(var(--split) * 1%);
+  transform: translateX(-50%);
+  will-change: left;
+}
+
+.ba-card.is-active .ba-handle-track {
+  will-change: left;
 }
 
 .ba-pill {
