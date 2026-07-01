@@ -1,0 +1,1 @@
+import{w as e}from"./fa-CnBedMVU.js";var t=e();function n({children:e}){return(0,t.jsxs)(`div`,{className:`inline-flex items-center gap-4`,children:[(0,t.jsx)(`span`,{className:`h-px w-12 bg-gold/60`}),(0,t.jsx)(`span`,{className:`eyebrow`,children:e})]})}export{n as t};
