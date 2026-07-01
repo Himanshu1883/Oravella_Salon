@@ -10,10 +10,10 @@ import { t as Footer } from "./Footer-B2SvbQZF.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as Lenis } from "../_libs/lenis.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BwrIFx4C.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DHS3nRqE.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-D847_YRt.css";
+var styles_default = "/assets/styles-DIrWq3AE.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -69,12 +69,34 @@ function useLenisScroll() {
 			wheelMultiplier: .85,
 			touchMultiplier: 1.5
 		});
+		const scroller = document.documentElement;
+		ScrollTrigger.scrollerProxy(scroller, {
+			scrollTop(value) {
+				if (arguments.length) lenis.scrollTo(value, { immediate: true });
+				return lenis.scroll;
+			},
+			getBoundingClientRect() {
+				return {
+					top: 0,
+					left: 0,
+					width: window.innerWidth,
+					height: window.innerHeight
+				};
+			},
+			pinType: scroller.style.transform ? "transform" : "fixed"
+		});
 		lenis.on("scroll", ScrollTrigger.update);
+		const onRefresh = () => lenis.resize();
+		ScrollTrigger.addEventListener("refresh", onRefresh);
 		const ticker = (time) => lenis.raf(time * 1e3);
 		gsapWithCSS.ticker.add(ticker);
 		gsapWithCSS.ticker.lagSmoothing(0);
+		ScrollTrigger.refresh();
+		requestAnimationFrame(() => ScrollTrigger.refresh());
 		window.__lenis = lenis;
 		return () => {
+			ScrollTrigger.removeEventListener("refresh", onRefresh);
+			ScrollTrigger.scrollerProxy(scroller, {});
 			gsapWithCSS.ticker.remove(ticker);
 			lenis.destroy();
 			delete window.__lenis;
@@ -552,7 +574,7 @@ var Route$1 = createFileRoute("/about")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
-var $$splitComponentImporter = () => import("./routes-BjkAkjE1.mjs");
+var $$splitComponentImporter = () => import("./routes-0lqC_bA9.mjs");
 var Route = createFileRoute("/")({
 	head: () => ({ meta: [
 		{ title: "Orvella Salon — Luxury Hair, Skin & Beauty in Lajpat Nagar" },

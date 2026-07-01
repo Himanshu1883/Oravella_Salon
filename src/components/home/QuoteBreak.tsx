@@ -11,121 +11,122 @@ const LOCATION = "Lajpat Nagar II · New Delhi";
 
 export function QuoteBreak() {
   const root = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) return;
+
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".quote-bg",
-        { yPercent: -8 },
-        {
-          yPercent: 12,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        },
-      );
+      const words = el.querySelectorAll<HTMLSpanElement>(".q-word");
 
-      const words = root.current!.querySelectorAll<HTMLSpanElement>(".q-word");
-      gsap.fromTo(
-        words,
-        { opacity: 0.08 },
-        {
-          opacity: 1,
-          stagger: 0.08,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top 70%",
-            end: "bottom 50%",
-            scrub: 0.6,
-          },
-        },
-      );
+      gsap.set(".quote-bg", { yPercent: -8 });
+      gsap.set(words, { opacity: 0.08 });
+      gsap.set(".quote-eyebrow", { opacity: 0, y: 24 });
+      gsap.set(".quote-rule", { scaleX: 0 });
+      gsap.set(".quote-support", { opacity: 0, y: 20 });
+      gsap.set(".quote-attribution", { opacity: 0, y: 16 });
+      gsap.set(".quote-mark", { opacity: 0, scale: 0.92 });
 
-      gsap.fromTo(
-        ".quote-eyebrow",
-        { opacity: 0, y: 24 },
-        {
-          opacity: 1,
-          y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top 78%",
-            end: "top 52%",
-            scrub: 0.5,
-          },
+      gsap.to(".quote-bg", {
+        yPercent: 12,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
         },
-      );
+      });
 
-      gsap.fromTo(
-        ".quote-rule",
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top 72%",
-            end: "top 48%",
-            scrub: 0.5,
-          },
+      gsap.to(words, {
+        opacity: 1,
+        stagger: 0.08,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 70%",
+          end: "bottom 50%",
+          scrub: 0.6,
         },
-      );
+      });
 
-      gsap.fromTo(
-        ".quote-support",
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top 58%",
-            end: "bottom 42%",
-            scrub: 0.55,
-          },
+      gsap.to(".quote-eyebrow", {
+        opacity: 1,
+        y: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 78%",
+          end: "top 52%",
+          scrub: 0.5,
         },
-      );
+      });
 
-      gsap.fromTo(
-        ".quote-attribution",
-        { opacity: 0, y: 16 },
-        {
-          opacity: 1,
-          y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top 50%",
-            end: "bottom 35%",
-            scrub: 0.5,
-          },
+      gsap.to(".quote-rule", {
+        scaleX: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 72%",
+          end: "top 48%",
+          scrub: 0.5,
         },
-      );
+      });
 
-      gsap.fromTo(
-        ".quote-mark",
-        { opacity: 0, scale: 0.92 },
-        {
-          opacity: 1,
-          scale: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top 75%",
-            end: "top 55%",
-            scrub: 0.45,
-          },
+      gsap.to(".quote-support", {
+        opacity: 1,
+        y: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 58%",
+          end: "bottom 42%",
+          scrub: 0.55,
         },
-      );
+      });
+
+      gsap.to(".quote-attribution", {
+        opacity: 1,
+        y: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 50%",
+          end: "bottom 35%",
+          scrub: 0.5,
+        },
+      });
+
+      gsap.to(".quote-mark", {
+        opacity: 1,
+        scale: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 75%",
+          end: "top 55%",
+          scrub: 0.45,
+        },
+      });
     }, root);
-    return () => ctx.revert();
+
+    const refresh = () => ScrollTrigger.refresh();
+    refresh();
+    requestAnimationFrame(refresh);
+
+    const video = videoRef.current;
+    const onVideoReady = () => refresh();
+    video?.addEventListener("loadeddata", onVideoReady, { once: true });
+    if (video && video.readyState >= 2) onVideoReady();
+
+    return () => {
+      video?.removeEventListener("loadeddata", onVideoReady);
+      ctx.revert();
+    };
   }, []);
 
   const quoteWords = QUOTE.split(" ");
@@ -137,6 +138,7 @@ export function QuoteBreak() {
     >
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
         <video
+          ref={videoRef}
           src={MEDIA.ambientReel}
           className="quote-bg absolute left-0 w-full object-cover"
           style={{ top: "-12%", height: "124%" }}
@@ -144,7 +146,7 @@ export function QuoteBreak() {
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
           poster={MEDIA.salonChandelier}
         />
 
@@ -216,10 +218,7 @@ export function QuoteBreak() {
           </p>
 
           <div className="quote-attribution mt-12 flex flex-col items-center gap-3 md:mt-16">
-            <div
-              className="h-px w-10 bg-white/25"
-              aria-hidden="true"
-            />
+            <div className="h-px w-10 bg-white/25" aria-hidden="true" />
             <p className="eyebrow text-white/55">— Orvella Salon</p>
             <p className="text-[0.62rem] uppercase tracking-[0.32em] text-white/38">
               {LOCATION}

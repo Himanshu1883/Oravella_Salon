@@ -1,5 +1,5 @@
 import { o as __toESM } from "../_runtime.mjs";
-import { n as gsapWithCSS } from "../_libs/gsap.mjs";
+import { n as gsapWithCSS, t as ScrollTrigger } from "../_libs/gsap.mjs";
 import { a as SERVICES, c as TESTIMONIALS, l as TRANSFORMATIONS, n as MEDIA, o as SITE, t as IG_PROFILE } from "./constants-CuQpxFf8.mjs";
 import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
@@ -7,7 +7,7 @@ import { t as SectionEyebrow } from "./SectionEyebrow-DcGyr-l9.mjs";
 import { t as FinalCTA } from "./FinalCTA-DjoHaFtR.mjs";
 import { _ as Grid3x3, a as Play, c as MessageCircle, f as Heart, g as SquareUser, h as Camera, i as Plus, m as Clapperboard, r as Settings } from "../_libs/lucide-react.mjs";
 import { a as SwiperSlide, i as Swiper, n as Autoplay, r as Pagination, t as EffectFade } from "../_libs/swiper.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BjkAkjE1.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-0lqC_bA9.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function HeroSection() {
@@ -843,98 +843,119 @@ var SUPPORT = "In our salon, time slows. Every visit is a quiet ritual — consu
 var LOCATION = "Lajpat Nagar II · New Delhi";
 function QuoteBreak() {
 	const root = (0, import_react.useRef)(null);
+	const videoRef = (0, import_react.useRef)(null);
 	(0, import_react.useEffect)(() => {
+		const el = root.current;
+		if (!el) return;
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 		const ctx = gsapWithCSS.context(() => {
-			gsapWithCSS.fromTo(".quote-bg", { yPercent: -8 }, {
+			const words = el.querySelectorAll(".q-word");
+			gsapWithCSS.set(".quote-bg", { yPercent: -8 });
+			gsapWithCSS.set(words, { opacity: .08 });
+			gsapWithCSS.set(".quote-eyebrow", {
+				opacity: 0,
+				y: 24
+			});
+			gsapWithCSS.set(".quote-rule", { scaleX: 0 });
+			gsapWithCSS.set(".quote-support", {
+				opacity: 0,
+				y: 20
+			});
+			gsapWithCSS.set(".quote-attribution", {
+				opacity: 0,
+				y: 16
+			});
+			gsapWithCSS.set(".quote-mark", {
+				opacity: 0,
+				scale: .92
+			});
+			gsapWithCSS.to(".quote-bg", {
 				yPercent: 12,
 				ease: "none",
 				scrollTrigger: {
-					trigger: root.current,
+					trigger: el,
 					start: "top bottom",
 					end: "bottom top",
 					scrub: true
 				}
 			});
-			const words = root.current.querySelectorAll(".q-word");
-			gsapWithCSS.fromTo(words, { opacity: .08 }, {
+			gsapWithCSS.to(words, {
 				opacity: 1,
 				stagger: .08,
 				ease: "none",
 				scrollTrigger: {
-					trigger: root.current,
+					trigger: el,
 					start: "top 70%",
 					end: "bottom 50%",
 					scrub: .6
 				}
 			});
-			gsapWithCSS.fromTo(".quote-eyebrow", {
-				opacity: 0,
-				y: 24
-			}, {
+			gsapWithCSS.to(".quote-eyebrow", {
 				opacity: 1,
 				y: 0,
 				ease: "none",
 				scrollTrigger: {
-					trigger: root.current,
+					trigger: el,
 					start: "top 78%",
 					end: "top 52%",
 					scrub: .5
 				}
 			});
-			gsapWithCSS.fromTo(".quote-rule", { scaleX: 0 }, {
+			gsapWithCSS.to(".quote-rule", {
 				scaleX: 1,
 				ease: "none",
 				scrollTrigger: {
-					trigger: root.current,
+					trigger: el,
 					start: "top 72%",
 					end: "top 48%",
 					scrub: .5
 				}
 			});
-			gsapWithCSS.fromTo(".quote-support", {
-				opacity: 0,
-				y: 20
-			}, {
+			gsapWithCSS.to(".quote-support", {
 				opacity: 1,
 				y: 0,
 				ease: "none",
 				scrollTrigger: {
-					trigger: root.current,
+					trigger: el,
 					start: "top 58%",
 					end: "bottom 42%",
 					scrub: .55
 				}
 			});
-			gsapWithCSS.fromTo(".quote-attribution", {
-				opacity: 0,
-				y: 16
-			}, {
+			gsapWithCSS.to(".quote-attribution", {
 				opacity: 1,
 				y: 0,
 				ease: "none",
 				scrollTrigger: {
-					trigger: root.current,
+					trigger: el,
 					start: "top 50%",
 					end: "bottom 35%",
 					scrub: .5
 				}
 			});
-			gsapWithCSS.fromTo(".quote-mark", {
-				opacity: 0,
-				scale: .92
-			}, {
+			gsapWithCSS.to(".quote-mark", {
 				opacity: 1,
 				scale: 1,
 				ease: "none",
 				scrollTrigger: {
-					trigger: root.current,
+					trigger: el,
 					start: "top 75%",
 					end: "top 55%",
 					scrub: .45
 				}
 			});
 		}, root);
-		return () => ctx.revert();
+		const refresh = () => ScrollTrigger.refresh();
+		refresh();
+		requestAnimationFrame(refresh);
+		const video = videoRef.current;
+		const onVideoReady = () => refresh();
+		video?.addEventListener("loadeddata", onVideoReady, { once: true });
+		if (video && video.readyState >= 2) onVideoReady();
+		return () => {
+			video?.removeEventListener("loadeddata", onVideoReady);
+			ctx.revert();
+		};
 	}, []);
 	const quoteWords = QUOTE.split(" ");
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
@@ -946,6 +967,7 @@ function QuoteBreak() {
 				"aria-hidden": "true",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("video", {
+						ref: videoRef,
 						src: MEDIA.ambientReel,
 						className: "quote-bg absolute left-0 w-full object-cover",
 						style: {
@@ -956,7 +978,7 @@ function QuoteBreak() {
 						muted: true,
 						loop: true,
 						playsInline: true,
-						preload: "metadata",
+						preload: "auto",
 						poster: MEDIA.salonChandelier
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-black/72" }),
@@ -1039,19 +1061,27 @@ function QuoteBreak() {
 }
 function BeforeAfterSlider({ before, after, label, index = 0 }) {
 	const container = (0, import_react.useRef)(null);
-	const [value, setValue] = (0, import_react.useState)(50);
+	const afterRef = (0, import_react.useRef)(null);
+	const handleRef = (0, import_react.useRef)(null);
+	const valueRef = (0, import_react.useRef)(50);
 	const [showHint, setShowHint] = (0, import_react.useState)(true);
 	const [isDemoing, setIsDemoing] = (0, import_react.useState)(false);
 	const dragging = (0, import_react.useRef)(false);
 	const userTouched = (0, import_react.useRef)(false);
 	const demoTween = (0, import_react.useRef)(null);
+	const applySplit = (0, import_react.useCallback)((pct) => {
+		const clamped = Math.max(0, Math.min(100, pct));
+		valueRef.current = clamped;
+		const clip = `inset(0 ${100 - clamped}% 0 0)`;
+		if (afterRef.current) afterRef.current.style.clipPath = clip;
+		if (handleRef.current) handleRef.current.style.left = `${clamped}%`;
+	}, []);
 	const setFromClientX = (0, import_react.useCallback)((clientX) => {
 		const el = container.current;
 		if (!el) return;
 		const rect = el.getBoundingClientRect();
-		const pct = (clientX - rect.left) / rect.width * 100;
-		setValue(Math.max(0, Math.min(100, pct)));
-	}, []);
+		applySplit((clientX - rect.left) / rect.width * 100);
+	}, [applySplit]);
 	const stopDemo = (0, import_react.useCallback)(() => {
 		if (userTouched.current) return;
 		userTouched.current = true;
@@ -1059,6 +1089,9 @@ function BeforeAfterSlider({ before, after, label, index = 0 }) {
 		setIsDemoing(false);
 		setShowHint(false);
 	}, []);
+	(0, import_react.useEffect)(() => {
+		applySplit(50);
+	}, [applySplit]);
 	(0, import_react.useEffect)(() => {
 		const onMove = (e) => dragging.current && setFromClientX(e.clientX);
 		const onTouch = (e) => dragging.current && e.touches[0] && setFromClientX(e.touches[0].clientX);
@@ -1095,7 +1128,7 @@ function BeforeAfterSlider({ before, after, label, index = 0 }) {
 				setShowHint(false);
 			},
 			onUpdate: () => {
-				if (!userTouched.current) setValue(obj.v);
+				if (!userTouched.current) applySplit(obj.v);
 			},
 			onComplete: () => {
 				if (userTouched.current) return;
@@ -1103,7 +1136,7 @@ function BeforeAfterSlider({ before, after, label, index = 0 }) {
 					v: 50,
 					duration: .55,
 					ease: "power2.out",
-					onUpdate: () => setValue(obj.v),
+					onUpdate: () => applySplit(obj.v),
 					onComplete: () => setIsDemoing(false)
 				});
 			}
@@ -1123,7 +1156,7 @@ function BeforeAfterSlider({ before, after, label, index = 0 }) {
 			observer.disconnect();
 			tween.kill();
 		};
-	}, [index]);
+	}, [index, applySplit]);
 	const beginDrag = (clientX) => {
 		stopDemo();
 		dragging.current = true;
@@ -1145,14 +1178,18 @@ function BeforeAfterSlider({ before, after, label, index = 0 }) {
 				src: before,
 				alt: `${label} — before`,
 				className: "absolute inset-0 h-full w-full object-cover",
+				loading: "lazy",
+				decoding: "async",
 				draggable: false
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+				ref: afterRef,
 				src: after,
 				alt: `${label} — after`,
-				className: "absolute inset-0 h-full w-full object-cover",
-				draggable: false,
-				style: { clipPath: `inset(0 ${100 - value}% 0 0)` }
+				className: "ba-after-layer absolute inset-0 h-full w-full object-cover",
+				loading: "lazy",
+				decoding: "async",
+				draggable: false
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/35" }),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -1168,8 +1205,9 @@ function BeforeAfterSlider({ before, after, label, index = 0 }) {
 				children: label
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				ref: handleRef,
 				className: "pointer-events-none absolute top-0 bottom-0 z-10 w-0.5 bg-gold",
-				style: { left: `${value}%` },
+				style: { left: "50%" },
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: `ba-handle absolute top-1/2 left-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-gold bg-bg-primary/90 text-gold ${isDemoing || showHint ? "ba-handle--pulse" : ""}`,
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -1181,7 +1219,7 @@ function BeforeAfterSlider({ before, after, label, index = 0 }) {
 			showHint && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "ba-hint pointer-events-none absolute inset-0 z-20 flex items-center justify-center bg-black/40",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "text-center px-6",
+					className: "px-6 text-center",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "eyebrow text-[0.62rem] text-white/85",
 						children: "Before & After"
@@ -1199,18 +1237,33 @@ function Transformations() {
 	(0, import_react.useEffect)(() => {
 		if (typeof window === "undefined") return;
 		const ctx = gsapWithCSS.context(() => {
-			gsapWithCSS.from(".ba-card", {
+			gsapWithCSS.set(".ba-card", {
 				y: 60,
-				opacity: 0,
+				opacity: 0
+			});
+			gsapWithCSS.to(".ba-card", {
+				y: 0,
+				opacity: 1,
 				duration: .9,
 				ease: "power3.out",
 				stagger: .15,
 				scrollTrigger: {
 					trigger: ".ba-grid",
-					start: "top 80%"
+					start: "top 80%",
+					toggleActions: "play none none none"
 				}
 			});
 		}, root);
+		const imgs = root.current?.querySelectorAll(".ba-card img") ?? [];
+		let pending = imgs.length;
+		const refreshIfReady = () => {
+			pending -= 1;
+			if (pending <= 0) ScrollTrigger.refresh();
+		};
+		imgs.forEach((img) => {
+			if (img.complete) refreshIfReady();
+			else img.addEventListener("load", refreshIfReady, { once: true });
+		});
 		return () => ctx.revert();
 	}, []);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {

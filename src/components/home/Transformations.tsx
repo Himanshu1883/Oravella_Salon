@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { gsap } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { TRANSFORMATIONS } from "@/lib/constants";
 import type { Transformation } from "@/types";
@@ -11,20 +11,32 @@ function BeforeAfterSlider({
   index = 0,
 }: Transformation & { index?: number }) {
   const container = useRef<HTMLDivElement>(null);
-  const [value, setValue] = useState(50);
+  const afterRef = useRef<HTMLImageElement>(null);
+  const handleRef = useRef<HTMLDivElement>(null);
+  const valueRef = useRef(50);
   const [showHint, setShowHint] = useState(true);
   const [isDemoing, setIsDemoing] = useState(false);
   const dragging = useRef(false);
   const userTouched = useRef(false);
   const demoTween = useRef<gsap.core.Tween | null>(null);
 
-  const setFromClientX = useCallback((clientX: number) => {
-    const el = container.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const pct = ((clientX - rect.left) / rect.width) * 100;
-    setValue(Math.max(0, Math.min(100, pct)));
+  const applySplit = useCallback((pct: number) => {
+    const clamped = Math.max(0, Math.min(100, pct));
+    valueRef.current = clamped;
+    const clip = `inset(0 ${100 - clamped}% 0 0)`;
+    if (afterRef.current) afterRef.current.style.clipPath = clip;
+    if (handleRef.current) handleRef.current.style.left = `${clamped}%`;
   }, []);
+
+  const setFromClientX = useCallback(
+    (clientX: number) => {
+      const el = container.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      applySplit(((clientX - rect.left) / rect.width) * 100);
+    },
+    [applySplit],
+  );
 
   const stopDemo = useCallback(() => {
     if (userTouched.current) return;
@@ -33,6 +45,10 @@ function BeforeAfterSlider({
     setIsDemoing(false);
     setShowHint(false);
   }, []);
+
+  useEffect(() => {
+    applySplit(50);
+  }, [applySplit]);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => dragging.current && setFromClientX(e.clientX);
@@ -75,7 +91,7 @@ function BeforeAfterSlider({
         setShowHint(false);
       },
       onUpdate: () => {
-        if (!userTouched.current) setValue(obj.v);
+        if (!userTouched.current) applySplit(obj.v);
       },
       onComplete: () => {
         if (userTouched.current) return;
@@ -83,7 +99,7 @@ function BeforeAfterSlider({
           v: 50,
           duration: 0.55,
           ease: "power2.out",
-          onUpdate: () => setValue(obj.v),
+          onUpdate: () => applySplit(obj.v),
           onComplete: () => setIsDemoing(false),
         });
       },
@@ -106,7 +122,7 @@ function BeforeAfterSlider({
       observer.disconnect();
       tween.kill();
     };
-  }, [index]);
+  }, [index, applySplit]);
 
   const beginDrag = (clientX: number) => {
     stopDemo();
@@ -128,14 +144,18 @@ function BeforeAfterSlider({
         src={before}
         alt={`${label} — before`}
         className="absolute inset-0 h-full w-full object-cover"
+        loading="lazy"
+        decoding="async"
         draggable={false}
       />
       <img
+        ref={afterRef}
         src={after}
         alt={`${label} — after`}
-        className="absolute inset-0 h-full w-full object-cover"
+        className="ba-after-layer absolute inset-0 h-full w-full object-cover"
+        loading="lazy"
+        decoding="async"
         draggable={false}
-        style={{ clipPath: `inset(0 ${100 - value}% 0 0)` }}
       />
 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/35" />
@@ -148,8 +168,9 @@ function BeforeAfterSlider({
       </span>
 
       <div
+        ref={handleRef}
         className="pointer-events-none absolute top-0 bottom-0 z-10 w-0.5 bg-gold"
-        style={{ left: `${value}%` }}
+        style={{ left: "50%" }}
       >
         <div
           className={`ba-handle absolute top-1/2 left-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-gold bg-bg-primary/90 text-gold ${isDemoing || showHint ? "ba-handle--pulse" : ""}`}
@@ -160,7 +181,7 @@ function BeforeAfterSlider({
 
       {showHint && (
         <div className="ba-hint pointer-events-none absolute inset-0 z-20 flex items-center justify-center bg-black/40">
-          <div className="text-center px-6">
+          <div className="px-6 text-center">
             <p className="eyebrow text-[0.62rem] text-white/85">Before &amp; After</p>
             <p className="mt-2 font-display text-xl italic text-white md:text-2xl">
               Slide to compare
@@ -177,16 +198,34 @@ export function Transformations() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
     const ctx = gsap.context(() => {
-      gsap.from(".ba-card", {
-        y: 60,
-        opacity: 0,
+      gsap.set(".ba-card", { y: 60, opacity: 0 });
+      gsap.to(".ba-card", {
+        y: 0,
+        opacity: 1,
         duration: 0.9,
         ease: "power3.out",
         stagger: 0.15,
-        scrollTrigger: { trigger: ".ba-grid", start: "top 80%" },
+        scrollTrigger: {
+          trigger: ".ba-grid",
+          start: "top 80%",
+          toggleActions: "play none none none",
+        },
       });
     }, root);
+
+    const imgs = root.current?.querySelectorAll<HTMLImageElement>(".ba-card img") ?? [];
+    let pending = imgs.length;
+    const refreshIfReady = () => {
+      pending -= 1;
+      if (pending <= 0) ScrollTrigger.refresh();
+    };
+    imgs.forEach((img) => {
+      if (img.complete) refreshIfReady();
+      else img.addEventListener("load", refreshIfReady, { once: true });
+    });
+
     return () => ctx.revert();
   }, []);
 

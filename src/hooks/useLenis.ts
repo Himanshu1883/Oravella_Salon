@@ -17,14 +17,43 @@ export function useLenisScroll() {
       touchMultiplier: 1.5,
     });
 
+    const scroller = document.documentElement;
+
+    ScrollTrigger.scrollerProxy(scroller, {
+      scrollTop(value) {
+        if (arguments.length) {
+          lenis.scrollTo(value, { immediate: true });
+        }
+        return lenis.scroll;
+      },
+      getBoundingClientRect() {
+        return {
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        };
+      },
+      pinType: scroller.style.transform ? "transform" : "fixed",
+    });
+
     lenis.on("scroll", ScrollTrigger.update);
+
+    const onRefresh = () => lenis.resize();
+    ScrollTrigger.addEventListener("refresh", onRefresh);
+
     const ticker = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(ticker);
     gsap.ticker.lagSmoothing(0);
 
+    ScrollTrigger.refresh();
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+
     (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
 
     return () => {
+      ScrollTrigger.removeEventListener("refresh", onRefresh);
+      ScrollTrigger.scrollerProxy(scroller, {});
       gsap.ticker.remove(ticker);
       lenis.destroy();
       delete (window as unknown as { __lenis?: Lenis }).__lenis;
