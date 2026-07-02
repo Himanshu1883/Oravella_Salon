@@ -1,0 +1,358 @@
+/* Codrops GridZoom — scoped under .gz-root
+   @see https://github.com/codrops/GridZoom */
+
+.gz-root {
+  --gz-text: var(--text-primary);
+  --gz-bg: var(--bg-primary);
+  --gz-link: var(--accent-gold);
+  --gz-link-hover: var(--text-primary);
+
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 50vh;
+  padding: 8vh 0 12vh;
+  background-color: var(--gz-bg);
+  color: var(--gz-text);
+  font-size: 15px;
+  line-height: 1;
+}
+
+body.gz-oh {
+  overflow: hidden;
+}
+
+/* Loader — scoped to section, never covers column scroll above */
+.gz-root.gz-loading::before,
+.gz-root.gz-loading::after {
+  content: "";
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.gz-root.gz-loading::before {
+  inset: 0;
+  background: var(--gz-bg);
+}
+
+.gz-root.gz-loading::after {
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border-radius: 50%;
+  opacity: 0.4;
+  background: var(--gz-link);
+  animation: gz-loader 0.7s linear infinite alternate forwards;
+}
+
+@keyframes gz-loader {
+  to {
+    opacity: 1;
+    transform: scale3d(0.5, 0.5, 1);
+  }
+}
+
+.gz-root a {
+  text-decoration: none;
+  color: var(--gz-link);
+  outline: none;
+  font-weight: 600;
+}
+
+.gz-root a:hover {
+  color: var(--gz-link-hover);
+}
+
+.gz-root .unbutton {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.gz-root .unbutton:focus {
+  outline: none;
+}
+
+.gz-root .line {
+  transform-origin: 0% 50%;
+  padding-bottom: 0.35rem;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.gz-root .oh {
+  overflow: hidden;
+}
+
+.gz-root .oh__inner {
+  display: inline-block;
+  transform-origin: 0% 50%;
+  will-change: transform;
+}
+
+.gz-root .frame {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.gz-root .frame__title {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  font-weight: 400;
+  margin: 0 0 1.5rem;
+  font-family: var(--font-display, serif);
+}
+
+.gz-root .frame__links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.gz-root .frame__tagline {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.gz-root .grid {
+  display: grid;
+  --grid-border-radius: 8px;
+  grid-template-columns: repeat(2, 50%);
+}
+
+.gz-root .grid--large {
+  grid-auto-rows: 32vmin;
+  padding: 0.5vw;
+  --grid-padding: 0.5vw;
+}
+
+/* Content overlay host — portaled to <body>. Carries the .gz-root class so
+   all grid/cell/back styles apply, but its own box must be invisible. */
+.gz-content-host {
+  position: relative;
+  z-index: 4;
+  pointer-events: none;
+  width: auto;
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.gz-content-host .grid--mini {
+  width: 220px;
+  height: 190px;
+  --grid-padding: 1px;
+  margin-bottom: 3vh;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+}
+
+.gz-content-host .grid {
+  display: grid;
+  --grid-border-radius: 8px;
+  grid-template-columns: repeat(2, 50%);
+}
+
+.gz-root .grid__cell {
+  display: grid;
+  align-items: end;
+}
+
+.gz-content-host .grid--mini .grid__cell:not(.grid__cell--current):hover .grid__cell-img {
+  opacity: 0.7;
+}
+
+.gz-content-host .grid__cell--current .grid__cell-img {
+  opacity: 0.3;
+}
+
+.gz-root .grid__cell--padded {
+  padding: calc(var(--grid-padding) * 2);
+}
+
+.gz-root .grid__cell-img {
+  width: calc(100% - var(--grid-padding) * 2);
+  height: calc(100% - var(--grid-padding) * 2);
+  margin: var(--grid-padding);
+  border-radius: var(--grid-border-radius);
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.gz-root .grid__cell-img-inner {
+  background-size: cover;
+  background-position: 50% 50%;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.gz-content-host .content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 15vh 8vw 0;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.gz-content-host .content__item {
+  position: absolute;
+  opacity: 0;
+  display: grid;
+}
+
+.gz-content-host .content__item--current {
+  opacity: 1;
+  position: relative;
+  pointer-events: auto;
+}
+
+.gz-content-host .content__item-number {
+  font-weight: 600;
+  display: block;
+  color: var(--accent-gold);
+}
+
+.gz-content-host .content__item-heading {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1;
+  margin: 1rem 0 3rem;
+  font-weight: 600;
+  font-family: var(--font-display, serif);
+}
+
+.gz-content-host .content__item-text {
+  max-width: 30ch;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.gz-content-host .content__item-link {
+  cursor: pointer;
+}
+
+.gz-content-host .slide-nav {
+  position: fixed;
+  width: 40%;
+  right: 15%;
+  top: 0;
+  height: 100%;
+  display: grid;
+  align-content: space-between;
+  pointer-events: none;
+}
+
+.gz-content-host .slide-nav__img {
+  width: 100%;
+  height: 10vh;
+  position: relative;
+  overflow: hidden;
+  opacity: 0.3;
+  cursor: not-allowed;
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.gz-content-host .content--open .slide-nav__img {
+  pointer-events: auto;
+}
+
+.gz-content-host .slide-nav__img--prev {
+  transform: translateY(-100%);
+  border-radius: 0 0 1.5vw 1.5vw;
+}
+
+.gz-content-host .slide-nav__img--next {
+  transform: translateY(100%);
+  border-radius: 1.5vw 1.5vw 0 0;
+}
+
+.gz-content-host .back {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: auto 0 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  stroke: var(--gz-text);
+  z-index: 1000;
+  cursor: pointer;
+  width: 50px;
+}
+
+.gz-content-host .back svg {
+  stroke-linecap: round;
+}
+
+.gz-content-host .back:hover,
+.gz-content-host .back:focus {
+  outline: none;
+  stroke: var(--accent-gold);
+}
+
+.gz-content-host .content--open .back {
+  pointer-events: auto;
+}
+
+@media screen and (min-width: 53em) {
+  .gz-content-host .content {
+    width: 38%;
+  }
+
+  .gz-root .grid {
+    grid-template-columns: repeat(4, 25%);
+  }
+
+  .gz-root .grid__cell--padded {
+    padding: var(--grid-padding);
+  }
+
+  .gz-root .grid__cell-c1-r1 { grid-column: 1; grid-row: 1; }
+  .gz-root .grid__cell-c3-r1 { grid-column: 3; grid-row: 1; }
+  .gz-root .grid__cell-c4-r1 { grid-column: 4; grid-row: 1; }
+  .gz-root .grid__cell-c1-r2 { grid-column: 1; grid-row: 2; }
+  .gz-root .grid__cell-c2-r2 { grid-column: 2; grid-row: 2; }
+  .gz-root .grid__cell-c3-r2 { grid-column: 3; grid-row: 2; }
+  .gz-root .grid__cell-c4-r2 { grid-column: 4; grid-row: 2; }
+  .gz-root .grid__cell-c2-r3 { grid-column: 2; grid-row: 3; }
+  .gz-root .grid__cell-c4-r3 { grid-column: 4; grid-row: 3; }
+  .gz-root .grid__cell-c1-r4 { grid-column: 1; grid-row: 4; }
+  .gz-root .grid__cell-c3-r4 { grid-column: 3; grid-row: 4; }
+  .gz-root .grid__cell-c3-r5 { grid-column: 3; grid-row: 5; }
+
+  .gz-content-host .grid--mini {
+    visibility: visible;
+    position: relative;
+  }
+
+  .gz-content-host .content--open .grid--mini {
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gz-root .gz-loading::after {
+    animation: none;
+  }
+}

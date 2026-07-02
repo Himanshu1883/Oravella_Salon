@@ -68,6 +68,13 @@
   z-index: 2;
 }
 
+/* Grid Zoom and other sections appended after the columns, before the footer */
+.cs-root .cs-after-columns {
+  position: relative;
+  width: 100%;
+  z-index: 3;
+}
+
 /* body-level utility used by the open/close timeline */
 body.cs-oh {
   overflow: hidden !important;

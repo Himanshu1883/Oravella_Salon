@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, type ReactNode } from "react";
 import { gsap } from "@/lib/gsap";
 import { MEDIA } from "@/lib/media";
 import { PreFooterZone } from "@/components/layout/PreFooterBanner";
@@ -462,7 +462,7 @@ class Grid {
    React component
 -------------------------------------------------------------------------- */
 
-export function ColumnScrollGallery() {
+export function ColumnScrollGallery({ afterColumns }: { afterColumns?: ReactNode } = {}) {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -519,8 +519,17 @@ export function ColumnScrollGallery() {
       );
     })();
 
+    // Grid Zoom (rendered after the columns) opens a fullscreen overlay. While
+    // it is open, freeze Locomotive so the background doesn't scroll behind it.
+    const onGzOpen = () => grid?.lscroll?.stop?.();
+    const onGzClose = () => grid?.lscroll?.start?.();
+    window.addEventListener("gz:open", onGzOpen);
+    window.addEventListener("gz:close", onGzClose);
+
     return () => {
       destroyed = true;
+      window.removeEventListener("gz:open", onGzOpen);
+      window.removeEventListener("gz:close", onGzClose);
       grid?.destroy();
       document.body.classList.remove("cs-oh", "cs-view-content");
       document.documentElement.classList.remove(
@@ -585,8 +594,14 @@ export function ColumnScrollGallery() {
           ))}
         </div>
 
+        {afterColumns ? (
+          <div className="cs-after-columns" data-scroll-section="">
+            {afterColumns}
+          </div>
+        ) : null}
+
         <div className="cs-footer" data-scroll-section="">
-          <PreFooterZone />
+          <PreFooterZone pinned={false} />
         </div>
       </div>
 

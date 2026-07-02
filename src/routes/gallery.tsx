@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ColumnScrollGallery } from "@/components/gallery/ColumnScrollGallery";
+import { GridZoomGallery } from "@/components/gallery/GridZoomGallery";
 
 export const Route = createFileRoute("/gallery")({
   head: () => ({
@@ -18,5 +19,5 @@ export const Route = createFileRoute("/gallery")({
 });
 
 function GalleryPage() {
-  return <ColumnScrollGallery />;
+  return <ColumnScrollGallery afterColumns={<GridZoomGallery />} />;
 }
